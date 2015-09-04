@@ -50,9 +50,12 @@ public class JsfolComponent extends UIComponentBase {
 			writer.endElement("div");
 
 			// load map into div
+			String jsVarName = "jsfolMap_" + this.getId();
 			writer.startElement("script", null);
-			writer.write("initMap('" + this.getId() + "'," + this.getX() + ","
-					+ this.getY() + "," + this.getZoom() + ")");
+			writer.write("var " + jsVarName + " = new jsfol.Map();");
+			writer.write(jsVarName + ".initMap('" + this.getId() + "',"
+					+ this.getX() + "," + this.getY() + "," + this.getZoom()
+					+ ")");
 			writer.endElement("script");
 
 		} else {
@@ -156,7 +159,7 @@ public class JsfolComponent extends UIComponentBase {
 	 */
 	public String getOpenlayersSrc() {
 		if (this.getStateHelper().eval("openlayersSrc") == null) {
-			return "http://openlayers.org/en/v3.6.0/build/ol.js";
+			return "http://openlayers.org/en/v3.8.2/build/ol.js";
 		} else {
 			return (String) this.getStateHelper().eval("openlayersSrc");
 		}

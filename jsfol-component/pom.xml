@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>eu.tondryk.jsfol</groupId>
 		<artifactId>jsfol</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jsfol-component</artifactId>
 
@@ -12,12 +12,11 @@
 
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.3</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -58,16 +57,16 @@
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>2.2.11</version>
+			<version>2.2.12</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>2.2.11</version>
+			<version>2.2.12</version>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- arquillian dependencies -->
+		<!-- arquillian dependencies (tests) -->
 		<dependency>
 			<groupId>org.jboss.arquillian.junit</groupId>
 			<artifactId>arquillian-junit-container</artifactId>
@@ -87,7 +86,7 @@
 			</exclusions>
 		</dependency>
 
-		<!-- embedded apache tomcat 7 dependencies -->
+		<!-- embedded apache tomcat 7 (for tests) -->
 		<dependency>
 			<groupId>org.jboss.arquillian.container</groupId>
 			<artifactId>arquillian-tomcat-embedded-7</artifactId>
