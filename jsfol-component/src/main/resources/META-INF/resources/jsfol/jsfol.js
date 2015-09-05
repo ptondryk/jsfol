@@ -1,7 +1,15 @@
 jsfol = (function() {
 
-	/** Class Map * */
+	/** Class Map */
 	var Map = function() {
+		this.map;
+		this.features = new ol.Collection();
+		this.featuresSource = new ol.source.Vector({
+			features : this.features
+		});
+		this.featuresLayer = new ol.layer.Vector({
+			source : this.featuresSource
+		});
 	};
 
 	Map.prototype = {
@@ -17,7 +25,7 @@ jsfol = (function() {
 		 *            zoom
 		 */
 		initMap : function(divName, x, y, z) {
-			var map = new ol.Map({
+			this.map = new ol.Map({
 				target : divName,
 				layers : [ new ol.layer.Tile({
 					source : new ol.source.OSM(),
@@ -29,6 +37,28 @@ jsfol = (function() {
 					zoom : z
 				})
 			});
+			this.map.addLayer(this.featuresLayer);
+		},
+		/**
+		 * This function loads features from given <b>geoJson</b>-object and
+		 * presents them on this map.
+		 * 
+		 * @param geoJson
+		 */
+		loadFeaturesFromGeoJson : function(geoJson) {
+			this.featuresSource.addFeatures((new ol.format.GeoJSON())
+					.readFeatures(geoJson));
+		},
+		/**
+		 * @param drawType
+		 *            None, Point, LineString, Polygon
+		 */
+		initInteraction : function(drawType) {
+			var draw = new ol.interaction.Draw({
+				features : this.features,
+				type : (drawType)
+			});
+			this.map.addInteraction(draw);
 		}
 	}
 

@@ -55,7 +55,17 @@ public class JsfolComponent extends UIComponentBase {
 			writer.write("var " + jsVarName + " = new jsfol.Map();");
 			writer.write(jsVarName + ".initMap('" + this.getId() + "',"
 					+ this.getX() + "," + this.getY() + "," + this.getZoom()
-					+ ")");
+					+ ");");
+			if (this.getValue() != null && !this.getValue().isEmpty()) {
+				writer.write(jsVarName + ".loadFeaturesFromGeoJson("
+						+ this.getValue() + ");");
+			}
+			if (this.getInteractionType() != null
+					&& !this.getInteractionType().isEmpty()
+					&& !"None".equalsIgnoreCase(this.getInteractionType())) {
+				writer.write(jsVarName + ".initInteraction('"
+						+ this.getInteractionType() + "');");
+			}
 			writer.endElement("script");
 
 		} else {
@@ -152,6 +162,39 @@ public class JsfolComponent extends UIComponentBase {
 	 */
 	public void setZoom(Integer zoom) {
 		this.getStateHelper().put("zoom", zoom);
+	}
+
+	/**
+	 * values in the geo-json format
+	 * 
+	 * @return the value
+	 */
+	public String getValue() {
+		return (String) this.getStateHelper().eval("value");
+	}
+
+	/**
+	 * @param value
+	 *            the value to set
+	 */
+	public void setValue(String value) {
+		this.getStateHelper().put("value", value);
+	}
+
+	/**
+	 * @return the interactionType
+	 */
+	public String getInteractionType() {
+		return (String) this.getStateHelper().eval("interactionType");
+	}
+
+	/**
+	 * 
+	 * @param interactionType
+	 *            the interactionType to set
+	 */
+	public void setInteractionType(String interactionType) {
+		this.getStateHelper().put("interactionType", interactionType);
 	}
 
 	/**
