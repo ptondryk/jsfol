@@ -38,6 +38,31 @@ jsfol = (function() {
 				})
 			});
 			this.map.addLayer(this.featuresLayer);
+			this.featuresSource.on('addfeature', function(evt) {
+
+				var input = document.getElementById("jsfol." + divName
+						+ ".features");
+				if (input == null) {
+					var input = document.createElement("input");
+					input.setAttribute("id", "jsfol." + divName + ".features");
+					input
+							.setAttribute("name", "jsfol." + divName
+									+ ".features");
+					input.setAttribute("type", "hidden");
+					input.setAttribute("value", ((new ol.format.GeoJSON())
+							.writeFeatures(this.features.getArray())));
+					input.setAttribute("autocomplete", "off");
+					document.getElementById(divName).appendChild(input);
+				} else {
+					input.setAttribute("value", ((new ol.format.GeoJSON())
+							.writeFeatures(this.features.getArray())));
+				}
+
+				if (this.newfeatureFunction != null) {
+					this.newfeatureFunction();
+				}
+
+			}, this);
 		},
 		/**
 		 * This function loads features from given <b>geoJson</b>-object and
@@ -59,6 +84,13 @@ jsfol = (function() {
 				type : (drawType)
 			});
 			this.map.addInteraction(draw);
+		},
+		/**
+		 * @param newfeatureFunction
+		 *            function that will be called when new feature is added
+		 */
+		addNewfeatureFunction : function(newfeatureFunction) {
+			this.newfeatureFunction = newfeatureFunction;
 		}
 	}
 
