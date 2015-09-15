@@ -172,7 +172,7 @@ public class JsfolRenderer extends Renderer {
 				&& !jsfolComponent.getInteractionType().isEmpty()
 				&& !"None"
 						.equalsIgnoreCase(jsfolComponent.getInteractionType())) {
-			writer.write(jsVarName + ".initInteraction('"
+			writer.write(jsVarName + ".initDraw('"
 					+ jsfolComponent.getInteractionType() + "');");
 		}
 	}
