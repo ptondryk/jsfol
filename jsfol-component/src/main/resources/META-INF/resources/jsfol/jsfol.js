@@ -112,6 +112,27 @@ jsfol = (function() {
 				}
 
 			}, this);
+
+			// init interactions
+			this.drawPoint = new ol.interaction.Draw({
+				features : this.features,
+				type : 'Point'
+			});
+			this.drawPolygon = new ol.interaction.Draw({
+				features : this.features,
+				type : 'Polygon'
+			});
+			this.drawLine = new ol.interaction.Draw({
+				features : this.features,
+				type : 'LineString'
+			});
+			this.modify = new ol.interaction.Modify({
+				features : this.features,
+				deleteCondition : function(event) {
+					return ol.events.condition.shiftKeyOnly(event)
+							&& ol.events.condition.singleClick(event);
+				}
+			});
 		},
 		/**
 		 * This function loads features from given <b>geoJson</b>-object and
@@ -131,31 +152,32 @@ jsfol = (function() {
 		 */
 		initDraw : function(drawType) {
 			this.endInteraction();
-			var draw = new ol.interaction.Draw({
-				features : this.features,
-				type : (drawType)
-			});
-			this.map.addInteraction(draw);
+			switch (drawType) {
+			case 'Polygon':
+				this.map.addInteraction(this.drawPolygon);
+				break;
+			case 'LineString':
+				this.map.addInteraction(this.drawLine);
+				break;
+			case 'Point':
+				this.map.addInteraction(this.drawPoint);
+			}
 		},
 		/**
 		 * initialize the modify-interaction-mode
 		 */
 		initModify : function() {
 			this.endInteraction();
-			var modify = new ol.interaction.Modify({
-				features : this.features,
-				deleteCondition : function(event) {
-					return ol.events.condition.shiftKeyOnly(event)
-							&& ol.events.condition.singleClick(event);
-				}
-			});
-			this.map.addInteraction(modify);
+			this.map.addInteraction(this.modify);
 		},
 		/**
 		 * 
 		 */
 		endInteraction : function() {
-			this.map.getInteractions().clear();
+			this.map.removeInteraction(this.drawPolygon);
+			this.map.removeInteraction(this.drawPoint);
+			this.map.removeInteraction(this.drawLine);
+			this.map.removeInteraction(this.modify);
 		},
 		/**
 		 * @param newfeatureFunction
@@ -163,7 +185,15 @@ jsfol = (function() {
 		 */
 		addNewfeatureFunction : function(newfeatureFunction) {
 			this.newfeatureFunction = newfeatureFunction;
+		},
+		/**
+		 * this function adds a zoom-slider to the map
+		 */
+		addZoomSlider : function() {
+			this.map.addControl(new ol.control.ZoomSlider());
+
 		}
+
 	}
 
 	return {

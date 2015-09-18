@@ -21,6 +21,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import eu.tondryk.jsfol.JsfolComponent;
+import eu.tondryk.jsfol.JsfolRenderer;
 
 /**
  * Tests of the {@link JsfolComponent}.
@@ -35,7 +36,7 @@ public class JsfolComponentTest {
 	public static WebArchive createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class, "jsfol-test.war")
-				.addClass(JsfolComponent.class)
+				.addClasses(JsfolComponent.class, JsfolRenderer.class)
 				.addAsWebResource(
 						new File("src/test/resources",
 								"jsfolComponentTest.xhtml"), "test.xhtml")
@@ -58,7 +59,6 @@ public class JsfolComponentTest {
 	@Test
 	public void testComponentRenderer() {
 		this.driver.get(deploymentUrl.toExternalForm() + "test.xhtml");
-
 		WebElement testDiv = this.driver.findElement(By.id("test"));
 		List<WebElement> expectedCanvas = testDiv.findElements(By
 				.tagName("canvas"));

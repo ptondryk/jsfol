@@ -37,7 +37,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 *
 	 */
 	enum PropertyKeys {
-		value, x, y, zoom, interactionType, openlayersSrc, width, height;
+		value, x, y, zoom, interactionType, openlayersJs, openlayersCss, width, height, showZoomSlider;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the width
 	 */
 	public Integer getWidth() {
-		return (Integer) this.getStateHelper().eval(PropertyKeys.width);
+		return (Integer) this.getStateHelper().eval(PropertyKeys.width, 100);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the height
 	 */
 	public Integer getHeight() {
-		return (Integer) this.getStateHelper().eval(PropertyKeys.height);
+		return (Integer) this.getStateHelper().eval(PropertyKeys.height, 100);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the x
 	 */
 	public Double getX() {
-		return (Double) this.getStateHelper().eval(PropertyKeys.x);
+		return (Double) this.getStateHelper().eval(PropertyKeys.x, 0.0d);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the y
 	 */
 	public Double getY() {
-		return (Double) this.getStateHelper().eval(PropertyKeys.y);
+		return (Double) this.getStateHelper().eval(PropertyKeys.y, 0.0d);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the zoom
 	 */
 	public Integer getZoom() {
-		return (Integer) this.getStateHelper().eval(PropertyKeys.zoom);
+		return (Integer) this.getStateHelper().eval(PropertyKeys.zoom, 10);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the value
 	 */
 	public String getValue() {
-		return (String) this.getStateHelper().eval(PropertyKeys.value);
+		return (String) this.getStateHelper().eval(PropertyKeys.value, "{}");
 	}
 
 	/**
@@ -168,8 +168,8 @@ public class JsfolComponent extends UIComponentBase implements
 	 * @return the interactionType
 	 */
 	public String getInteractionType() {
-		return (String) this.getStateHelper()
-				.eval(PropertyKeys.interactionType);
+		return (String) this.getStateHelper().eval(
+				PropertyKeys.interactionType, "None");
 	}
 
 	/**
@@ -183,22 +183,51 @@ public class JsfolComponent extends UIComponentBase implements
 	}
 
 	/**
-	 * @return the openlayersSrc
+	 * @return the openlayersJs
 	 */
-	public String getOpenlayersSrc() {
-		if (this.getStateHelper().eval("openlayersSrc") == null) {
-			return "http://openlayers.org/en/v3.9.0/build/ol.js";
-		} else {
-			return (String) this.getStateHelper().eval(
-					PropertyKeys.openlayersSrc);
-		}
+	public String getOpenlayersJs() {
+		return (String) this.getStateHelper().eval(PropertyKeys.openlayersJs,
+				"http://openlayers.org/en/v3.9.0/build/ol.js");
 	}
 
 	/**
-	 * @param openlayersSrc
-	 *            the openlayersSrc to set
+	 * @param openlayersJs
+	 *            the openlayersJs to set
 	 */
-	public void setOpenlayersSrc(String openlayersSrc) {
-		this.getStateHelper().put(PropertyKeys.openlayersSrc, openlayersSrc);
+	public void setOpenlayersJs(String openlayersJs) {
+		this.getStateHelper().put(PropertyKeys.openlayersJs, openlayersJs);
+	}
+
+	/**
+	 * @return the showZoomSlider
+	 */
+	public Boolean isShowZoomSlider() {
+		return (Boolean) this.getStateHelper().eval(
+				PropertyKeys.showZoomSlider, false);
+	}
+
+	/**
+	 * 
+	 * @param showZoomSlider
+	 *            the showZoomSlider to set
+	 */
+	public void setShowZoomSlider(boolean showZoomSlider) {
+		this.getStateHelper().put(PropertyKeys.showZoomSlider, showZoomSlider);
+	}
+
+	/**
+	 * @return the openlayersCss
+	 */
+	public Object getOpenlayersCss() {
+		return (String) this.getStateHelper().eval(PropertyKeys.openlayersCss,
+				"http://openlayers.org/en/v3.9.0/css/ol.css");
+	}
+
+	/**
+	 * @param openlayersCss
+	 *            the openlayersCss to set
+	 */
+	public void setOpenlayersCss(String openlayersCss) {
+		this.getStateHelper().put(PropertyKeys.openlayersCss, openlayersCss);
 	}
 }

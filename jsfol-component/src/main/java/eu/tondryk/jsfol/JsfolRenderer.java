@@ -69,6 +69,9 @@ public class JsfolRenderer extends Renderer {
 				// set the type of interaction (if any)
 				this.initInteraction(writer, jsVarName, jsfolComponent);
 
+				// add the controls (if any)
+				this.initControl(writer, jsVarName, jsfolComponent);
+
 				writer.endElement("script");
 
 			} else {
@@ -91,7 +94,7 @@ public class JsfolRenderer extends Renderer {
 	}
 
 	/**
-	 * This method adds the openlayers-library to the web-site.
+	 * This method adds the openlayers-library and style to the web-site.
 	 * 
 	 * @param writer
 	 * @param jsfolComponent
@@ -101,8 +104,13 @@ public class JsfolRenderer extends Renderer {
 			JsfolComponent jsfolComponent) throws IOException {
 		writer.startElement("script", null);
 		writer.writeAttribute("type", "text/javascript", null);
-		writer.writeAttribute("src", jsfolComponent.getOpenlayersSrc(), null);
+		writer.writeAttribute("src", jsfolComponent.getOpenlayersJs(), null);
 		writer.endElement("script");
+		writer.startElement("link", null);
+		writer.writeAttribute("rel", "stylesheet", null);
+		writer.writeAttribute("href", jsfolComponent.getOpenlayersCss(), null);
+		writer.writeAttribute("type", "text/css", null);
+		writer.endElement("link");
 	}
 
 	/**
@@ -203,6 +211,22 @@ public class JsfolRenderer extends Renderer {
 				.replaceAll("@this", jsfolComponent.getClientId(context));
 		writer.write(jsVarName + ".addNewfeatureFunction(function() {"
 				+ newfeatureFunction + ";return false;});");
+	}
+
+	/**
+	 * This method initialize the controls (like zoom-slider).
+	 * 
+	 * @param writer
+	 * @param jsVarName
+	 * @param jsfolComponent
+	 * @throws IOException
+	 */
+	private void initControl(ResponseWriter writer, String jsVarName,
+			JsfolComponent jsfolComponent) throws IOException {
+		if (jsfolComponent.isShowZoomSlider()) {
+			writer.write(jsVarName + ".addZoomSlider();");
+		}
+
 	}
 
 }
