@@ -5,6 +5,8 @@ package eu.tondryk.jsfol;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.el.ValueExpression;
 import javax.faces.application.ResourceDependencies;
@@ -152,15 +154,17 @@ public class JsfolComponent extends UIComponentBase implements
 	 * 
 	 * @return the value
 	 */
-	public String getValue() {
-		return (String) this.getStateHelper().eval(PropertyKeys.value, "{}");
+	@SuppressWarnings("unchecked")
+	public List<Feature> getValue() {
+		return (List<Feature>) this.getStateHelper().eval(PropertyKeys.value,
+				Collections.emptyList());
 	}
 
 	/**
 	 * @param value
 	 *            the value to set
 	 */
-	public void setValue(String value) {
+	public void setValue(List<Feature> value) {
 		this.getStateHelper().put(PropertyKeys.value, value);
 	}
 

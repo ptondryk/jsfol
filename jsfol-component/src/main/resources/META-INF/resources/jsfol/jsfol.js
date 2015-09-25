@@ -91,6 +91,11 @@ jsfol = (function() {
 
 				var input = document.getElementById("jsfol." + divName
 						+ ".features");
+				if (evt.feature.getStyle() != null) {
+					evt.feature.set("style", this.formatStyle(evt.feature
+							.getStyle()));
+				}
+
 				if (input == null) {
 					var input = document.createElement("input");
 					input.setAttribute("id", "jsfol." + divName + ".features");
@@ -98,13 +103,13 @@ jsfol = (function() {
 							.setAttribute("name", "jsfol." + divName
 									+ ".features");
 					input.setAttribute("type", "hidden");
-					input.setAttribute("value", ((new ol.format.GeoJSON())
-							.writeFeatures(this.features.getArray())));
+					input.setAttribute("value", (new ol.format.GeoJSON())
+							.writeFeatures(this.features.getArray()));
 					input.setAttribute("autocomplete", "off");
 					document.getElementById(divName).appendChild(input);
 				} else {
-					input.setAttribute("value", ((new ol.format.GeoJSON())
-							.writeFeatures(this.features.getArray())));
+					input.setAttribute("value", (new ol.format.GeoJSON())
+							.writeFeatures(this.features.getArray()));
 				}
 
 				if (this.newfeatureFunction != null) {
@@ -140,9 +145,8 @@ jsfol = (function() {
 		 * 
 		 * @param geoJson
 		 */
-		loadFeaturesFromGeoJson : function(geoJson) {
-			this.featuresSource.addFeatures((new ol.format.GeoJSON())
-					.readFeatures(geoJson));
+		addFeatures : function(featuresArray) {
+			this.featuresSource.addFeatures(featuresArray);
 		},
 		/**
 		 * initialize the draw-interaction-mode
@@ -191,7 +195,173 @@ jsfol = (function() {
 		 */
 		addZoomSlider : function() {
 			this.map.addControl(new ol.control.ZoomSlider());
-
+		},
+		/**
+		 * this function creates a readable string from ol.style.Style object
+		 */
+		formatStyle : function(style) {
+			var result = {};
+			if (style.getZIndex() != null) {
+				result.zIndex = style.getZIndex();
+			}
+			if (style.getFill() != null) {
+				result.fill = this.formatFill(style.getFill());
+			}
+			if (style.getStroke() != null) {
+				result.stroke = this.formatStroke(style.getStroke());
+			}
+			if (style.getText() != null) {
+				result.text = this.formatText(style.getText());
+			}
+			if (style.getImage() != null) {
+				if (style.getImage() instanceof ol.style.Icon) {
+					result.image = this.formatIcon(style.getImage());
+					result.image.type = 'Icon';
+				} else if (style.getImage() instanceof ol.style.Circle) {
+					result.image = this.formatCircle(style.getImage());
+					result.image.type = 'Circle';
+				}
+			}
+			return result;
+		},
+		/**
+		 * this function creates a readable object from ol.style.Fill object
+		 */
+		formatFill : function(fill) {
+			var result = {};
+			if (fill.getColor() != null) {
+				result.color = fill.getColor();
+			}
+			return result;
+		},
+		/**
+		 * this function creates a readable object from ol.style.Stroke object
+		 */
+		formatStroke : function(stroke) {
+			var result = {};
+			if (stroke.getColor() != null) {
+				result.color = stroke.getColor();
+			}
+			if (stroke.getLineCap() != null) {
+				result.lineCap = stroke.getLineCap();
+			}
+			if (stroke.getLineDash() != null) {
+				result.lineDash = stroke.getLineDash();
+			}
+			if (stroke.getLineJoin() != null) {
+				result.lineJoin = stroke.getLineJoin();
+			}
+			if (stroke.getMiterLimit() != null) {
+				result.miterLimit = stroke.getMiterLimit();
+			}
+			if (stroke.getWidth() != null) {
+				result.width = stroke.getWidth();
+			}
+			return result;
+		},
+		/**
+		 * this function creates a readable object from ol.style.Text object
+		 */
+		formatText : function(text) {
+			var result = {};
+			if (text.getFill() != null) {
+				result.fill = this.formatFill(text.getFill());
+			}
+			if (text.getFont() != null) {
+				result.font = text.getFont();
+			}
+			if (text.getOffsetX() != null) {
+				result.offsetX = text.getOffsetX();
+			}
+			if (text.getOffsetY() != null) {
+				result.offsetY = text.getOffsetY();
+			}
+			if (text.getRotation() != null) {
+				result.rotation = text.getRotation();
+			}
+			if (text.getScale() != null) {
+				result.scale = text.getScale();
+			}
+			if (text.getStroke() != null) {
+				result.stroke = this.formatStroke(text.getStroke());
+			}
+			if (text.getText() != null) {
+				result.text = text.getText();
+			}
+			if (text.getTextAlign() != null) {
+				result.textAlign = text.getTextAlign();
+			}
+			if (text.getTextBaseline() != null) {
+				result.textBaseline = text.getTextBaseline();
+			}
+			return result;
+		},
+		/**
+		 * this function creates a readable object from ol.style.Icon object
+		 */
+		formatIcon : function(icon) {
+			var result = {};
+			if (icon.getAnchor() != null) {
+				result.anchor = icon.getAnchor();
+			}
+			if (icon.getOpacity() != null) {
+				result.opacity = icon.getOpacity();
+			}
+			if (icon.getOrigin() != null) {
+				result.origin = icon.getOrigin();
+			}
+			if (icon.getRotateWithView() != null) {
+				result.rotateWithView = icon.getRotateWithView();
+			}
+			if (icon.getRotation() != null) {
+				result.rotation = icon.getRotation();
+			}
+			if (icon.getScale() != null) {
+				result.scale = icon.getScale();
+			}
+			if (icon.getSize() != null) {
+				result.size = icon.getSize();
+			}
+			if (icon.getSnapToPixel() != null) {
+				result.snapToPixel = icon.getSnapToPixel();
+			}
+			if (icon.getSrc() != null) {
+				result.src = icon.getSrc();
+			}
+			// TODO test "icon.getImage(pixelRatio)"
+			return result;
+		},
+		/**
+		 * this function creates a readable object from ol.style.Circle object
+		 */
+		formatCircle : function(circle) {
+			var result = {};
+			if (circle.getFill() != null) {
+				result.fill = this.formatFill(circle.getFill());
+			}
+			if (circle.getOpacity() != null) {
+				result.opacity = circle.getOpacity();
+			}
+			if (circle.getRadius() != null) {
+				result.radius = circle.getRadius();
+			}
+			if (circle.getRotateWithView() != null) {
+				result.rotationWithView = circle.getRotateWithView();
+			}
+			if (circle.getRotation() != null) {
+				result.rotation = circle.getRotation();
+			}
+			if (circle.getScale() != null) {
+				result.scale = circle.getScale();
+			}
+			if (circle.getSnapToPixel() != null) {
+				result.snapToPixel = circle.getSnapToPixel();
+			}
+			if (circle.getStroke() != null) {
+				result.stroke = this.formatStroke(circle.getStroke());
+			}
+			// TODO test "circle.getImage(pixelRatio)"
+			return result;
 		}
 
 	}

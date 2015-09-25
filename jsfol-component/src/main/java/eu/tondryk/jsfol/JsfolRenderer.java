@@ -4,8 +4,11 @@
 package eu.tondryk.jsfol;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.ClientBehavior;
@@ -14,6 +17,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.Renderer;
+
+import eu.tondryk.jsfol.converter.JsfolFormatter;
+import eu.tondryk.jsfol.converter.JsfolParser;
 
 /**
  * @author ptondryk
@@ -88,8 +94,8 @@ public class JsfolRenderer extends Renderer {
 			// extract the new value from request parameters
 			Map<String, String> requestMap = context.getExternalContext()
 					.getRequestParameterMap();
-			jsfolComponent.setValue(requestMap.get("jsfol."
-					+ jsfolComponent.getId() + ".features"));
+			jsfolComponent.setValue(JsfolParser.parseGeoJson(requestMap
+					.get("jsfol." + jsfolComponent.getId() + ".features")));
 		}
 	}
 
@@ -159,8 +165,35 @@ public class JsfolRenderer extends Renderer {
 			JsfolComponent jsfolComponent) throws IOException {
 		if (jsfolComponent.getValue() != null
 				&& !jsfolComponent.getValue().isEmpty()) {
-			writer.write(jsVarName + ".loadFeaturesFromGeoJson("
-					+ jsfolComponent.getValue() + ");");
+
+			String features = "";
+			String featuresArray = "";
+
+			// prepare unique name for feature variables
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			String namePrefix = "feature" + sdf.format(new Date());
+			Random random = new Random();
+
+			for (Feature feature : jsfolComponent.getValue()) {
+				String name = namePrefix + Math.abs(random.nextLong());
+
+				// prepare feature definition
+				features += "var " + name + " = "
+						+ JsfolFormatter.convertFeature(feature) + ";";
+				features += name + ".setStyle("
+						+ JsfolFormatter.convertStyle(feature.getStyle())
+						+ ");";
+
+				// add name to features array
+				if (!featuresArray.isEmpty()) {
+					featuresArray += ",";
+				}
+				featuresArray += name;
+				;
+			}
+
+			writer.write(features + jsVarName + ".addFeatures(" + "["
+					+ featuresArray + "]" + ");");
 		}
 
 	}
