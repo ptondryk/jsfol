@@ -335,6 +335,7 @@ jsfol = (function() {
 		 * this function creates a readable object from ol.style.Circle object
 		 */
 		formatCircle : function(circle) {
+			console.log(circle);
 			var result = {};
 			if (circle.getFill() != null) {
 				result.fill = this.formatFill(circle.getFill());

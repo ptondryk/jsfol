@@ -51,12 +51,12 @@ public class Text {
 	/**
 	 * 
 	 */
-	private Integer scale;
+	private Double scale;
 
 	/**
 	 * 
 	 */
-	private Double roration;
+	private Double rotation;
 
 	/**
 	 * @param font
@@ -72,7 +72,7 @@ public class Text {
 	 */
 	public Text(String font, String text, String textAlign,
 			String textBaseLine, Fill fill, Stroke stroke, Integer offsetX,
-			Integer offsetY, Integer scale, Double roration) {
+			Integer offsetY, Double scale, Double roration) {
 		super();
 		this.font = font;
 		this.text = text;
@@ -83,7 +83,7 @@ public class Text {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.scale = scale;
-		this.roration = roration;
+		this.rotation = roration;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class Text {
 	/**
 	 * @return the scale
 	 */
-	public Integer getScale() {
+	public Double getScale() {
 		return scale;
 	}
 
@@ -217,23 +217,23 @@ public class Text {
 	 * @param scale
 	 *            the scale to set
 	 */
-	public void setScale(Integer scale) {
+	public void setScale(Double scale) {
 		this.scale = scale;
 	}
 
 	/**
-	 * @return the roration
+	 * @return the rotation
 	 */
 	public Double getRotation() {
-		return roration;
+		return rotation;
 	}
 
 	/**
-	 * @param roration
-	 *            the roration to set
+	 * @param rotation
+	 *            the rotation to set
 	 */
-	public void setRoration(Double roration) {
-		this.roration = roration;
+	public void setRoration(Double rotation) {
+		this.rotation = rotation;
 	}
 
 }

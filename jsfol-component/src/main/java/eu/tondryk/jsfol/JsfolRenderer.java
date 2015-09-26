@@ -180,9 +180,11 @@ public class JsfolRenderer extends Renderer {
 				// prepare feature definition
 				features += "var " + name + " = "
 						+ JsfolFormatter.convertFeature(feature) + ";";
-				features += name + ".setStyle("
-						+ JsfolFormatter.convertStyle(feature.getStyle())
-						+ ");";
+				if (feature.getStyle() != null) {
+					features += name + ".setStyle("
+							+ JsfolFormatter.convertStyle(feature.getStyle())
+							+ ");";
+				}
 
 				// add name to features array
 				if (!featuresArray.isEmpty()) {

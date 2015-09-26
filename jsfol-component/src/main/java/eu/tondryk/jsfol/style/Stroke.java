@@ -41,7 +41,7 @@ public class Stroke {
 	/**
 	 * 
 	 */
-	private Long width;
+	private Integer width;
 
 	/**
 	 * @param color
@@ -52,7 +52,7 @@ public class Stroke {
 	 * @param width
 	 */
 	public Stroke(Color color, String lineCap, String lineJoin,
-			Integer[] lineDash, Integer miterLimit, Long width) {
+			Integer[] lineDash, Integer miterLimit, Integer width) {
 		super();
 		this.color = color;
 		this.lineCap = lineCap;
@@ -140,7 +140,7 @@ public class Stroke {
 	/**
 	 * @return the width
 	 */
-	public Long getWidth() {
+	public Integer getWidth() {
 		return width;
 	}
 
@@ -148,7 +148,7 @@ public class Stroke {
 	 * @param width
 	 *            the width to set
 	 */
-	public void setWidth(Long width) {
+	public void setWidth(Integer width) {
 		this.width = width;
 	}
 

@@ -34,7 +34,7 @@ public class JsfolFormatter {
 	 * @return
 	 */
 	public static String convertFeature(Feature feature) {
-		return "new ol.Feature({"
+		return "new ol.Feature({geometry : "
 				+ JsfolFormatter.convertGeometry(feature.getGeometry()) + "})";
 	}
 
@@ -74,7 +74,7 @@ public class JsfolFormatter {
 	 * @return
 	 */
 	private static String convertGeometry(Geometry geometry) {
-		String result = "geometry : ";
+		String result = "";
 		if (geometry instanceof Polygon) {
 			result += JsfolFormatter.convertPolygon((Polygon) geometry);
 		} else {
@@ -117,7 +117,7 @@ public class JsfolFormatter {
 			}
 			result += JsfolFormatter.convertGeometry(geometry);
 		}
-		return "[" + result + "]";
+		return "new ol.geom.GeometryCollection([" + result + "])";
 	}
 
 	/**
@@ -175,12 +175,10 @@ public class JsfolFormatter {
 			result += "scale : " + circle.getScale() + ",";
 		}
 		if (circle.getFill() != null) {
-			result += "fill : " + JsfolFormatter.convertFill(circle.getFill())
-					+ ",";
+			result += JsfolFormatter.convertFill(circle.getFill()) + ",";
 		}
 		if (circle.getStroke() != null) {
-			result += "stroke : "
-					+ JsfolFormatter.convertStroke(circle.getStroke());
+			result += JsfolFormatter.convertStroke(circle.getStroke());
 		}
 		if (result.endsWith(",")) {
 			result = result.substring(0, result.length() - 1);
@@ -296,8 +294,7 @@ public class JsfolFormatter {
 	private static String convertText(Text text) {
 		String result = "text : new ol.style.Text({";
 		if (text.getFill() != null) {
-			result += "fill : " + JsfolFormatter.convertFill(text.getFill())
-					+ ",";
+			result += JsfolFormatter.convertFill(text.getFill()) + ",";
 		}
 		if (text.getFont() != null) {
 			result += "font : '" + text.getFont() + "',";
@@ -324,8 +321,7 @@ public class JsfolFormatter {
 			result += "scale : " + text.getScale() + ",";
 		}
 		if (text.getStroke() != null) {
-			result += "stroke : "
-					+ JsfolFormatter.convertStroke(text.getStroke()) + ",";
+			result += JsfolFormatter.convertStroke(text.getStroke()) + ",";
 		}
 		if (result.endsWith(",")) {
 			result = result.substring(0, result.length() - 1);
@@ -368,8 +364,7 @@ public class JsfolFormatter {
 	 * @return
 	 */
 	private static String convertCoordinate(Coordinate coord) {
-		return "ol.proj.transform([" + coord.getX() + ", " + coord.getY()
-				+ "], 'EPSG:4326', 'EPSG:3857')";
+		return "[" + coord.getX() + ", " + coord.getY() + "]";
 	}
 
 	/**

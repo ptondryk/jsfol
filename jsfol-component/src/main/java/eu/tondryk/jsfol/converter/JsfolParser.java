@@ -218,7 +218,7 @@ public class JsfolParser {
 		String lineJoin = null;
 		Integer[] lineDash = null;
 		Integer miterLimit = null;
-		Long width = null;
+		Integer width = null;
 		if (jsonStroke.get("color") != null) {
 			color = JsfolParser.parseColor((String) jsonStroke.get("color"));
 		}
@@ -230,7 +230,7 @@ public class JsfolParser {
 			lineDash = new Integer[lineDashArray.size()];
 			int i = 0;
 			for (Object dash : (JSONArray) jsonStroke.get("lineDash")) {
-				lineDash[i++] = (Integer) dash;
+				lineDash[i++] = ((Number) dash).intValue();
 			}
 		}
 		if (jsonStroke.get("lineJoin") != null) {
@@ -240,7 +240,7 @@ public class JsfolParser {
 			miterLimit = (Integer) jsonStroke.get("miterLimit");
 		}
 		if (jsonStroke.get("width") != null) {
-			width = (Long) jsonStroke.get("width");
+			width = ((Number) jsonStroke.get("width")).intValue();
 		}
 		return new Stroke(color, lineCap, lineJoin, lineDash, miterLimit, width);
 	}
@@ -263,17 +263,19 @@ public class JsfolParser {
 
 		if (image != null) {
 			if (jsonImage.get("opacity") != null) {
-				image.setOpacity((Double) jsonImage.get("opacity"));
+				image.setOpacity(((Number) jsonImage.get("opacity"))
+						.doubleValue());
 			}
 			if (jsonImage.get("rotateWithView") != null) {
 				image.setRotateWithView((Boolean) jsonImage
 						.get("rotateWithView"));
 			}
 			if (jsonImage.get("rotation") != null) {
-				image.setRotation((Double) jsonImage.get("rotation"));
+				image.setRotation(((Number) jsonImage.get("rotation"))
+						.doubleValue());
 			}
 			if (jsonImage.get("scale") != null) {
-				image.setScale((Double) jsonImage.get("scale"));
+				image.setScale(((Number) jsonImage.get("scale")).doubleValue());
 			}
 			if (jsonImage.get("snapToPixel") != null) {
 				image.setSnapToPixel((Boolean) jsonImage.get("snapToPixel"));
@@ -295,7 +297,7 @@ public class JsfolParser {
 					.get("fill")));
 		}
 		if (jsonCircle.get("radius") != null) {
-			result.setRadius((Double) jsonCircle.get("radius"));
+			result.setRadius(((Number) jsonCircle.get("radius")).doubleValue());
 		}
 		if (jsonCircle.get("stroke") != null) {
 			result.setStroke(JsfolParser.parseStroke((JSONObject) jsonCircle
@@ -315,14 +317,14 @@ public class JsfolParser {
 		if (jsonIcon.get("anchor") != null) {
 			JSONArray jsonAnchor = (JSONArray) jsonIcon.get("size");
 			Double[] anchor = new Double[2];
-			anchor[0] = (Double) jsonAnchor.get(0);
-			anchor[1] = (Double) jsonAnchor.get(1);
+			anchor[0] = ((Number) jsonAnchor.get(0)).doubleValue();
+			anchor[1] = ((Number) jsonAnchor.get(1)).doubleValue();
 			result.setAnchor(anchor);
 		}
 		if (jsonIcon.get("size") != null) {
 			JSONArray jsonSize = (JSONArray) jsonIcon.get("size");
-			result.setSize(new Size((Integer) jsonSize.get(0),
-					(Integer) jsonSize.get(1)));
+			result.setSize(new Size(((Number) jsonSize.get(0)).intValue(),
+					((Number) jsonSize.get(1)).intValue()));
 		}
 		if (jsonIcon.get("src") != null) {
 			result.setSrc((String) jsonIcon.get("src"));
@@ -345,7 +347,7 @@ public class JsfolParser {
 		Stroke stroke = null;
 		Integer offsetX = null;
 		Integer offsetY = null;
-		Integer scale = null;
+		Double scale = null;
 		Double rotation = null;
 		if (jsonText.get("fill") != null) {
 			fill = JsfolParser.parseFill((JSONObject) jsonText.get("fill"));
@@ -354,16 +356,16 @@ public class JsfolParser {
 			font = (String) jsonText.get("font");
 		}
 		if (jsonText.get("offsetX") != null) {
-			offsetX = (Integer) jsonText.get("offsetX");
+			offsetX = ((Number) jsonText.get("offsetX")).intValue();
 		}
 		if (jsonText.get("offsetY") != null) {
-			offsetY = (Integer) jsonText.get("offsetY");
+			offsetY = ((Number) jsonText.get("offsetY")).intValue();
 		}
 		if (jsonText.get("rotation") != null) {
-			rotation = (Double) jsonText.get("rotation");
+			rotation = ((Number) jsonText.get("rotation")).doubleValue();
 		}
 		if (jsonText.get("scale") != null) {
-			scale = (Integer) jsonText.get("scale");
+			scale = ((Number) jsonText.get("scale")).doubleValue();
 		}
 		if (jsonText.get("stroke") != null) {
 			stroke = JsfolParser.parseStroke((JSONObject) jsonText

@@ -3,6 +3,8 @@
  */
 package eu.tondryk.jsfol;
 
+import java.io.Serializable;
+
 import eu.tondryk.jsfol.geom.Geometry;
 import eu.tondryk.jsfol.style.Style;
 
@@ -12,7 +14,12 @@ import eu.tondryk.jsfol.style.Style;
  * @author ptondryk
  *
  */
-public class Feature {
+public class Feature implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4583832582441524562L;
 
 	/**
 	 * string in geo-json format
