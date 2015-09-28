@@ -41,4 +41,14 @@ public class Fill {
 		this.color = color;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Fill [color=" + color + "]";
+	}
+
 }

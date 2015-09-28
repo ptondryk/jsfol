@@ -80,4 +80,15 @@ public class Feature implements Serializable {
 		this.style = style;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Feature [geometry=" + this.geometry + ", style=" + this.style
+				+ "]";
+	}
+
 }

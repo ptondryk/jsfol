@@ -97,4 +97,15 @@ public class Circle extends Image {
 		this.radius = radius;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Circle [fill=" + fill + ", stroke=" + stroke + ", radius="
+				+ radius + "]";
+	}
+
 }

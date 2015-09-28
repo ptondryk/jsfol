@@ -134,4 +134,18 @@ public class Color {
 		else
 			return alphaValue;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Color ["
+				+ (this.isLiteral() ? "literal=" + literal : "green=" + green
+						+ ", blue=" + blue + ", red=" + red + ", alpha="
+						+ alpha) + "]";
+	}
+
 }

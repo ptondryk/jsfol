@@ -114,4 +114,15 @@ public class Style {
 		this.text = text;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Style [fill=" + fill + ", image=" + image + ", stroke="
+				+ stroke + ", text=" + text + "]";
+	}
+
 }

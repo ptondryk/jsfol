@@ -104,12 +104,18 @@ jsfol = (function() {
 									+ ".features");
 					input.setAttribute("type", "hidden");
 					input.setAttribute("value", (new ol.format.GeoJSON())
-							.writeFeatures(this.features.getArray()));
+							.writeFeatures(this.features.getArray(), {
+								dataProjection : "EPSG:4326",
+								featureProjection : "EPSG:3857"
+							}));
 					input.setAttribute("autocomplete", "off");
 					document.getElementById(divName).appendChild(input);
 				} else {
 					input.setAttribute("value", (new ol.format.GeoJSON())
-							.writeFeatures(this.features.getArray()));
+							.writeFeatures(this.features.getArray(), {
+								dataProjection : "EPSG:4326",
+								featureProjection : "EPSG:3857"
+							}));
 				}
 
 				if (this.newfeatureFunction != null) {
@@ -146,6 +152,9 @@ jsfol = (function() {
 		 * @param geoJson
 		 */
 		addFeatures : function(featuresArray) {
+			featuresArray.forEach(function(feature) {
+				feature.getGeometry().transform("EPSG:4326", "EPSG:3857");
+			});
 			this.featuresSource.addFeatures(featuresArray);
 		},
 		/**

@@ -43,4 +43,14 @@ public class Polygon extends SimpleGeometry {
 		this.coordinates = coordinates;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Polygon [coordinates=" + coordinates + "]";
+	}
+
 }

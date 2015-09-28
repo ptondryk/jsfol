@@ -236,4 +236,18 @@ public class Text {
 		this.rotation = rotation;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Text [font=" + font + ", text=" + text + ", textAlign="
+				+ textAlign + ", textBaseLine=" + textBaseLine + ", fill="
+				+ fill + ", stroke=" + stroke + ", offsetX=" + offsetX
+				+ ", offsetY=" + offsetY + ", scale=" + scale + ", rotation="
+				+ rotation + "]";
+	}
+
 }

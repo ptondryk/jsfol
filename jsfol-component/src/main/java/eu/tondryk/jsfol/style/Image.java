@@ -132,4 +132,16 @@ public abstract class Image {
 		this.snapToPixel = snapToPixel;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Image [opacity=" + opacity + ", rotateWithView="
+				+ rotateWithView + ", rotation=" + rotation + ", scale="
+				+ scale + ", snapToPixel=" + snapToPixel + "]";
+	}
+
 }

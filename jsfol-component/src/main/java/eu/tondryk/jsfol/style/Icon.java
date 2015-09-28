@@ -3,6 +3,8 @@
  */
 package eu.tondryk.jsfol.style;
 
+import java.util.Arrays;
+
 import eu.tondryk.jsfol.type.Size;
 
 /**
@@ -277,6 +279,22 @@ public class Icon extends Image {
 	 */
 	public void setSrc(String src) {
 		this.src = src;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Icon [anchor=" + Arrays.toString(anchor) + ", anchorOrigin="
+				+ anchorOrigin + ", anchorXUnits=" + anchorXUnits
+				+ ", anchorYUnits=" + anchorYUnits + ", crossOrigin="
+				+ crossOrigin + ", img=" + img + ", offset="
+				+ Arrays.toString(offset) + ", offsetOrigin=" + offsetOrigin
+				+ ", size=" + size + ", imgSize=" + imgSize + ", src=" + src
+				+ "]";
 	}
 
 }

@@ -3,6 +3,8 @@
  */
 package eu.tondryk.jsfol.style;
 
+import java.util.Arrays;
+
 import eu.tondryk.jsfol.type.Color;
 
 /**
@@ -150,6 +152,19 @@ public class Stroke {
 	 */
 	public void setWidth(Integer width) {
 		this.width = width;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Stroke [color=" + color + ", lineCap=" + lineCap
+				+ ", lineJoin=" + lineJoin + ", lineDash="
+				+ Arrays.toString(lineDash) + ", miterLimit=" + miterLimit
+				+ ", width=" + width + "]";
 	}
 
 }
