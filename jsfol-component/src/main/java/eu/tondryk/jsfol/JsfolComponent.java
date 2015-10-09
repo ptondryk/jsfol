@@ -64,7 +64,9 @@ public class JsfolComponent extends UIComponentBase implements
 		super.processUpdates(context);
 		for (PropertyKeys propertyKey : PropertyKeys.values()) {
 			ValueExpression ve = this.getValueExpression(propertyKey.name());
-			if (ve != null) {
+			if (ve != null
+					&& !this.getStateHelper().eval(propertyKey)
+							.equals(ve.getValue(context.getELContext()))) {
 				try {
 					ve.setValue(context.getELContext(), this.getStateHelper()
 							.eval(propertyKey));
@@ -224,7 +226,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 */
 	public Object getOpenlayersCss() {
 		return (String) this.getStateHelper().eval(PropertyKeys.openlayersCss,
-				"http://openlayers.org/en/v3.9.0/css/ol.css");
+				"http://openlayers.org/en/v3.10.0/build/ol.js");
 	}
 
 	/**

@@ -135,6 +135,68 @@ public abstract class Image {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((opacity == null) ? 0 : opacity.hashCode());
+		result = prime * result
+				+ ((rotateWithView == null) ? 0 : rotateWithView.hashCode());
+		result = prime * result
+				+ ((rotation == null) ? 0 : rotation.hashCode());
+		result = prime * result + ((scale == null) ? 0 : scale.hashCode());
+		result = prime * result
+				+ ((snapToPixel == null) ? 0 : snapToPixel.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Image other = (Image) obj;
+		if (opacity == null) {
+			if (other.opacity != null)
+				return false;
+		} else if (!opacity.equals(other.opacity))
+			return false;
+		if (rotateWithView == null) {
+			if (other.rotateWithView != null)
+				return false;
+		} else if (!rotateWithView.equals(other.rotateWithView))
+			return false;
+		if (rotation == null) {
+			if (other.rotation != null)
+				return false;
+		} else if (!rotation.equals(other.rotation))
+			return false;
+		if (scale == null) {
+			if (other.scale != null)
+				return false;
+		} else if (!scale.equals(other.scale))
+			return false;
+		if (snapToPixel == null) {
+			if (other.snapToPixel != null)
+				return false;
+		} else if (!snapToPixel.equals(other.snapToPixel))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

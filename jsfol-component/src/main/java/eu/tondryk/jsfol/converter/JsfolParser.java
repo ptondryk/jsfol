@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 
 import eu.tondryk.jsfol.Feature;
 import eu.tondryk.jsfol.geom.Geometry;
+import eu.tondryk.jsfol.geom.Point;
 import eu.tondryk.jsfol.geom.Polygon;
 import eu.tondryk.jsfol.style.Circle;
 import eu.tondryk.jsfol.style.Fill;
@@ -32,7 +33,8 @@ import eu.tondryk.jsfol.type.Size;
 public class JsfolParser {
 
 	/**
-	 * TODO comment
+	 * This method converts the given geo-json string into list of
+	 * {@link Feature} objects.
 	 * 
 	 * @param geoJson
 	 * @return
@@ -81,6 +83,8 @@ public class JsfolParser {
 	}
 
 	/**
+	 * This method converts the given geometry (given in geo-json format) to
+	 * {@link Geometry} object.
 	 * 
 	 * @param jsonObject
 	 * @return
@@ -92,6 +96,9 @@ public class JsfolParser {
 			result = JsfolParser.parsePolygon((JSONArray) jsonGeometry
 					.get("coordinates"));
 			break;
+		case "Point":
+			result = JsfolParser.parsePoint((JSONArray) jsonGeometry
+					.get("coordinates"));
 		default:
 			// TODO implement other type
 		}
@@ -99,7 +106,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given json-array of coordinates to
+	 * {@link Polygon} object.
 	 * 
 	 * @param jsonCoordinates
 	 * @return
@@ -114,7 +122,19 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given json-array of coordinates to {@link Point}
+	 * object.
+	 * 
+	 * @param jsonCoordinates
+	 * @return
+	 */
+	private static Point parsePoint(JSONArray jsonCoordinates) {
+		return new Point(JsfolParser.parseCoordinate(jsonCoordinates));
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates into list of
+	 * {@link Coordinate} object.
 	 * 
 	 * @param jsonLinearRing
 	 * @return
@@ -128,7 +148,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given json-array of coordinates to
+	 * {@link Coordinate} object.
 	 * 
 	 * @param coordinate
 	 * @return
@@ -139,7 +160,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given style (given in json format) to
+	 * {@link Style} object.
 	 * 
 	 * @param jsonObject
 	 * @return
@@ -168,7 +190,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>fill</i> (given in json format) to
+	 * {@link Fill} object.
 	 * 
 	 * @param jsonFill
 	 * @return
@@ -178,7 +201,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>color</i> (given as rgba-string) to
+	 * {@link Color} object.
 	 * 
 	 * @param colorAsString
 	 * @return
@@ -207,7 +231,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>stroke</i> (given in json format) to
+	 * {@link Stroke} object.
 	 * 
 	 * @param jsonStroke
 	 * @return
@@ -246,7 +271,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>image</i> (given in json format) to
+	 * {@link Image} object.
 	 * 
 	 * @param jsonImage
 	 * @return
@@ -285,7 +311,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>circle</i> (given in json format) to
+	 * {@link Circle} object.
 	 * 
 	 * @param jsonCircle
 	 * @return
@@ -307,7 +334,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>icon</i> (given in json format) to
+	 * {@link Icon} object.
 	 * 
 	 * @param jsonIcon
 	 * @return
@@ -333,7 +361,8 @@ public class JsfolParser {
 	}
 
 	/**
-	 * TODO comment
+	 * This method converts the given <i>text</i> (given in json format) to
+	 * {@link Text} object.
 	 * 
 	 * @param jsonText
 	 * @return

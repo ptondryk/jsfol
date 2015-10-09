@@ -157,6 +157,70 @@ public class Stroke {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((lineCap == null) ? 0 : lineCap.hashCode());
+		result = prime * result + Arrays.hashCode(lineDash);
+		result = prime * result
+				+ ((lineJoin == null) ? 0 : lineJoin.hashCode());
+		result = prime * result
+				+ ((miterLimit == null) ? 0 : miterLimit.hashCode());
+		result = prime * result + ((width == null) ? 0 : width.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stroke other = (Stroke) obj;
+		if (color == null) {
+			if (other.color != null)
+				return false;
+		} else if (!color.equals(other.color))
+			return false;
+		if (lineCap == null) {
+			if (other.lineCap != null)
+				return false;
+		} else if (!lineCap.equals(other.lineCap))
+			return false;
+		if (!Arrays.equals(lineDash, other.lineDash))
+			return false;
+		if (lineJoin == null) {
+			if (other.lineJoin != null)
+				return false;
+		} else if (!lineJoin.equals(other.lineJoin))
+			return false;
+		if (miterLimit == null) {
+			if (other.miterLimit != null)
+				return false;
+		} else if (!miterLimit.equals(other.miterLimit))
+			return false;
+		if (width == null) {
+			if (other.width != null)
+				return false;
+		} else if (!width.equals(other.width))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -239,6 +239,98 @@ public class Text {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fill == null) ? 0 : fill.hashCode());
+		result = prime * result + ((font == null) ? 0 : font.hashCode());
+		result = prime * result + ((offsetX == null) ? 0 : offsetX.hashCode());
+		result = prime * result + ((offsetY == null) ? 0 : offsetY.hashCode());
+		result = prime * result
+				+ ((rotation == null) ? 0 : rotation.hashCode());
+		result = prime * result + ((scale == null) ? 0 : scale.hashCode());
+		result = prime * result + ((stroke == null) ? 0 : stroke.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result
+				+ ((textAlign == null) ? 0 : textAlign.hashCode());
+		result = prime * result
+				+ ((textBaseLine == null) ? 0 : textBaseLine.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Text other = (Text) obj;
+		if (fill == null) {
+			if (other.fill != null)
+				return false;
+		} else if (!fill.equals(other.fill))
+			return false;
+		if (font == null) {
+			if (other.font != null)
+				return false;
+		} else if (!font.equals(other.font))
+			return false;
+		if (offsetX == null) {
+			if (other.offsetX != null)
+				return false;
+		} else if (!offsetX.equals(other.offsetX))
+			return false;
+		if (offsetY == null) {
+			if (other.offsetY != null)
+				return false;
+		} else if (!offsetY.equals(other.offsetY))
+			return false;
+		if (rotation == null) {
+			if (other.rotation != null)
+				return false;
+		} else if (!rotation.equals(other.rotation))
+			return false;
+		if (scale == null) {
+			if (other.scale != null)
+				return false;
+		} else if (!scale.equals(other.scale))
+			return false;
+		if (stroke == null) {
+			if (other.stroke != null)
+				return false;
+		} else if (!stroke.equals(other.stroke))
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (textAlign == null) {
+			if (other.textAlign != null)
+				return false;
+		} else if (!textAlign.equals(other.textAlign))
+			return false;
+		if (textBaseLine == null) {
+			if (other.textBaseLine != null)
+				return false;
+		} else if (!textBaseLine.equals(other.textBaseLine))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

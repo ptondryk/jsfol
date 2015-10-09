@@ -8,6 +8,7 @@ import java.util.List;
 import eu.tondryk.jsfol.Feature;
 import eu.tondryk.jsfol.geom.Geometry;
 import eu.tondryk.jsfol.geom.GeometryCollection;
+import eu.tondryk.jsfol.geom.Point;
 import eu.tondryk.jsfol.geom.Polygon;
 import eu.tondryk.jsfol.style.Circle;
 import eu.tondryk.jsfol.style.Fill;
@@ -77,6 +78,8 @@ public class JsfolFormatter {
 		String result = "";
 		if (geometry instanceof Polygon) {
 			result += JsfolFormatter.convertPolygon((Polygon) geometry);
+		} else if (geometry instanceof Point) {
+			result += JsfolFormatter.convertPoint((Point) geometry);
 		} else {
 			result += JsfolFormatter
 					.convertGeometryCollection((GeometryCollection) geometry);
@@ -86,7 +89,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Polygon} object into string representing
+	 * definition of javascript <code>ol.geom.Polygon</code>.
 	 * 
 	 * @param polygon
 	 */
@@ -104,7 +108,21 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Point} object into string representing
+	 * definition of javascript <code>ol.geom.Point</code>.
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private static String convertPoint(Point point) {
+		return "new ol.geom.Point("
+				+ JsfolFormatter.convertCoordinate(point.getCoordinate()) + ")";
+	}
+
+	/**
+	 * This method convert given {@link GeometryCollection} object into string
+	 * representing definition of javascript
+	 * <code>ol.geom.GeometryCollection</code>.
 	 * 
 	 * @param geometry
 	 */
@@ -155,7 +173,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Circle} object into string representing
+	 * definition of javascript <code>ol.style.Circle</code>.
 	 * 
 	 * @param circle
 	 * @return
@@ -188,7 +207,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Icon} object into string representing
+	 * definition of javascript <code>ol.style.Icon</code>.
 	 * 
 	 * @param icon
 	 * @return
@@ -331,7 +351,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Color} object into string representing
+	 * definition of javascript <code>ol.Color</code>.
 	 * 
 	 * @param color
 	 * @return
@@ -348,7 +369,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO
+	 * This method convert given {@link Size} object into string representing
+	 * definition of javascript array containing 2 elements: width and heigth.
 	 * 
 	 * @param size
 	 * @return
@@ -358,7 +380,9 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Coordinate} object into string
+	 * representing definition of javascript array containing 2 elements: x
+	 * (logitude) and y (latitude).
 	 * 
 	 * @param coord
 	 * @return
@@ -368,7 +392,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Integer} array into string representing
+	 * definition of javascript array.
 	 * 
 	 * @param array
 	 * @return
@@ -385,7 +410,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Double} array into string representing
+	 * definition of javascript array.
 	 * 
 	 * @param array
 	 * @return
@@ -402,7 +428,8 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * TODO comment
+	 * This method convert given {@link Coordinate} array into string
+	 * representing definition of javascript array.
 	 * 
 	 * @param array
 	 * @return

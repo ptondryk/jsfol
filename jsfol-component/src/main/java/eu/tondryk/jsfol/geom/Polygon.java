@@ -3,6 +3,7 @@
  */
 package eu.tondryk.jsfol.geom;
 
+import java.io.Serializable;
 import java.util.List;
 
 import eu.tondryk.jsfol.type.Coordinate;
@@ -13,8 +14,12 @@ import eu.tondryk.jsfol.type.Coordinate;
  * @author ptondryk
  *
  */
-public class Polygon extends SimpleGeometry {
+public class Polygon extends SimpleGeometry implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4779488735465618309L;
 	/**
 	 * 
 	 */
@@ -41,6 +46,42 @@ public class Polygon extends SimpleGeometry {
 	 */
 	public void setCoordinates(List<List<Coordinate>> coordinates) {
 		this.coordinates = coordinates;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((coordinates == null) ? 0 : coordinates.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Polygon other = (Polygon) obj;
+		if (coordinates == null) {
+			if (other.coordinates != null)
+				return false;
+		} else if (!coordinates.equals(other.coordinates))
+			return false;
+		return true;
 	}
 
 	/*

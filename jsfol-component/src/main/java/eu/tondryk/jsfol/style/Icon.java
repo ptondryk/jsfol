@@ -284,6 +284,100 @@ public class Icon extends Image {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(anchor);
+		result = prime * result
+				+ ((anchorOrigin == null) ? 0 : anchorOrigin.hashCode());
+		result = prime * result
+				+ ((anchorXUnits == null) ? 0 : anchorXUnits.hashCode());
+		result = prime * result
+				+ ((anchorYUnits == null) ? 0 : anchorYUnits.hashCode());
+		result = prime * result
+				+ ((crossOrigin == null) ? 0 : crossOrigin.hashCode());
+		result = prime * result + ((img == null) ? 0 : img.hashCode());
+		result = prime * result + ((imgSize == null) ? 0 : imgSize.hashCode());
+		result = prime * result + Arrays.hashCode(offset);
+		result = prime * result
+				+ ((offsetOrigin == null) ? 0 : offsetOrigin.hashCode());
+		result = prime * result + ((size == null) ? 0 : size.hashCode());
+		result = prime * result + ((src == null) ? 0 : src.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Icon other = (Icon) obj;
+		if (!Arrays.equals(anchor, other.anchor))
+			return false;
+		if (anchorOrigin == null) {
+			if (other.anchorOrigin != null)
+				return false;
+		} else if (!anchorOrigin.equals(other.anchorOrigin))
+			return false;
+		if (anchorXUnits == null) {
+			if (other.anchorXUnits != null)
+				return false;
+		} else if (!anchorXUnits.equals(other.anchorXUnits))
+			return false;
+		if (anchorYUnits == null) {
+			if (other.anchorYUnits != null)
+				return false;
+		} else if (!anchorYUnits.equals(other.anchorYUnits))
+			return false;
+		if (crossOrigin == null) {
+			if (other.crossOrigin != null)
+				return false;
+		} else if (!crossOrigin.equals(other.crossOrigin))
+			return false;
+		if (img == null) {
+			if (other.img != null)
+				return false;
+		} else if (!img.equals(other.img))
+			return false;
+		if (imgSize == null) {
+			if (other.imgSize != null)
+				return false;
+		} else if (!imgSize.equals(other.imgSize))
+			return false;
+		if (!Arrays.equals(offset, other.offset))
+			return false;
+		if (offsetOrigin == null) {
+			if (other.offsetOrigin != null)
+				return false;
+		} else if (!offsetOrigin.equals(other.offsetOrigin))
+			return false;
+		if (size == null) {
+			if (other.size != null)
+				return false;
+		} else if (!size.equals(other.size))
+			return false;
+		if (src == null) {
+			if (other.src != null)
+				return false;
+		} else if (!src.equals(other.src))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

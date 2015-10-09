@@ -100,6 +100,53 @@ public class Circle extends Image {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fill == null) ? 0 : fill.hashCode());
+		result = prime * result + ((radius == null) ? 0 : radius.hashCode());
+		result = prime * result + ((stroke == null) ? 0 : stroke.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Circle other = (Circle) obj;
+		if (fill == null) {
+			if (other.fill != null)
+				return false;
+		} else if (!fill.equals(other.fill))
+			return false;
+		if (radius == null) {
+			if (other.radius != null)
+				return false;
+		} else if (!radius.equals(other.radius))
+			return false;
+		if (stroke == null) {
+			if (other.stroke != null)
+				return false;
+		} else if (!stroke.equals(other.stroke))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
