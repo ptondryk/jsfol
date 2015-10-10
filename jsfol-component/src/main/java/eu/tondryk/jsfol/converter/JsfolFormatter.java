@@ -8,6 +8,10 @@ import java.util.List;
 import eu.tondryk.jsfol.Feature;
 import eu.tondryk.jsfol.geom.Geometry;
 import eu.tondryk.jsfol.geom.GeometryCollection;
+import eu.tondryk.jsfol.geom.LineString;
+import eu.tondryk.jsfol.geom.MultiLineString;
+import eu.tondryk.jsfol.geom.MultiPoint;
+import eu.tondryk.jsfol.geom.MultiPolygon;
 import eu.tondryk.jsfol.geom.Point;
 import eu.tondryk.jsfol.geom.Polygon;
 import eu.tondryk.jsfol.style.Circle;
@@ -80,12 +84,63 @@ public class JsfolFormatter {
 			result += JsfolFormatter.convertPolygon((Polygon) geometry);
 		} else if (geometry instanceof Point) {
 			result += JsfolFormatter.convertPoint((Point) geometry);
+		} else if (geometry instanceof eu.tondryk.jsfol.geom.Circle) {
+			result += JsfolFormatter
+					.convertCircle((eu.tondryk.jsfol.geom.Circle) geometry);
+		} else if (geometry instanceof LineString) {
+			result += JsfolFormatter.convertLineString((LineString) geometry);
+		} else if (geometry instanceof MultiPoint) {
+			result += JsfolFormatter.convertMultiPoint((MultiPoint) geometry);
+		} else if (geometry instanceof MultiLineString) {
+			result += JsfolFormatter
+					.convertMultiLineString((MultiLineString) geometry);
+		} else if (geometry instanceof MultiPolygon) {
+			result += JsfolFormatter
+					.convertMultiPolygon((MultiPolygon) geometry);
 		} else {
 			result += JsfolFormatter
 					.convertGeometryCollection((GeometryCollection) geometry);
 		}
-		// TODO implement other SimpleGeometry types
 		return result;
+	}
+
+	/**
+	 * This method convert given {@link eu.tondryk.jsfol.geom.Circle} object
+	 * into string representing definition of javascript
+	 * <code>ol.geom.Circle</code>.
+	 * 
+	 * @param circle
+	 * @return
+	 */
+	private static String convertCircle(eu.tondryk.jsfol.geom.Circle circle) {
+		return "new ol.geom.Circle("
+				+ JsfolFormatter.convertCoordinate(circle.getCenter()) + ","
+				+ circle.getRadius() + ")";
+	}
+
+	/**
+	 * This method convert given {@link Point} object into string representing
+	 * definition of javascript <code>ol.geom.Point</code>.
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private static String convertPoint(Point point) {
+		return "new ol.geom.Point("
+				+ JsfolFormatter.convertCoordinate(point.getCoordinate()) + ")";
+	}
+
+	/**
+	 * This method convert given {@link LineString} object into string
+	 * representing definition of javascript <code>ol.geom.LineString</code>.
+	 * 
+	 * @param lineString
+	 * @return
+	 */
+	private static String convertLineString(LineString lineString) {
+		return "new ol.geom.LineString("
+				+ JsfolFormatter.convertJsArray(lineString.getCoordinates())
+				+ ")";
 	}
 
 	/**
@@ -108,15 +163,66 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * This method convert given {@link Point} object into string representing
-	 * definition of javascript <code>ol.geom.Point</code>.
+	 * This method convert given {@link MultiPoint} object into string
+	 * representing definition of javascript <code>ol.geom.MutliPoint</code>.
 	 * 
-	 * @param point
+	 * @param multiPoint
 	 * @return
 	 */
-	private static String convertPoint(Point point) {
-		return "new ol.geom.Point("
-				+ JsfolFormatter.convertCoordinate(point.getCoordinate()) + ")";
+	private static String convertMultiPoint(MultiPoint multiPoint) {
+		String points = "";
+		for (Point point : multiPoint.getPoints()) {
+			if (!points.isEmpty()) {
+				points += ",";
+			}
+			points += JsfolFormatter.convertCoordinate(point.getCoordinate());
+		}
+		return "new ol.geom.MultiPoint([" + points + "])";
+	}
+
+	/**
+	 * This method convert given {@link MultiLineString} object into string
+	 * representing definition of javascript
+	 * <code>ol.geom.MultiLineString</code>.
+	 * 
+	 * @param multiLineString
+	 * @return
+	 */
+	private static String convertMultiLineString(MultiLineString multiLineString) {
+		String lineStrings = "";
+		for (LineString lineString : multiLineString.getLineStrings()) {
+			if (!lineStrings.isEmpty()) {
+				lineStrings += ",";
+			}
+			lineStrings += JsfolFormatter.convertJsArray(lineString
+					.getCoordinates());
+		}
+		return "new ol.geom.MultiLineString([" + lineStrings + "])";
+	}
+
+	/**
+	 * This method convert given {@link MultiPolygon} object into string
+	 * representing definition of javascript <code>ol.geom.MultiPolygon</code>.
+	 * 
+	 * @param multiPolygon
+	 * @return
+	 */
+	private static String convertMultiPolygon(MultiPolygon multiPolygon) {
+		String polygons = "";
+		for (Polygon polygon : multiPolygon.getPolygons()) {
+			if (!polygons.isEmpty()) {
+				polygons += ",";
+			}
+			String tmp = "";
+			for (List<Coordinate> linearRing : polygon.getCoordinates()) {
+				if (!tmp.isEmpty()) {
+					tmp += ",";
+				}
+				tmp += JsfolFormatter.convertJsArray(linearRing);
+			}
+			polygons += "[" + tmp + "]";
+		}
+		return "new ol.geom.MultiPolygon([" + polygons + "])";
 	}
 
 	/**
@@ -392,37 +498,23 @@ public class JsfolFormatter {
 	}
 
 	/**
-	 * This method convert given {@link Integer} array into string representing
+	 * This method convert given {@link Object} array into string representing
 	 * definition of javascript array.
 	 * 
 	 * @param array
 	 * @return
 	 */
-	private static String convertJsArray(Integer[] array) {
+	private static String convertJsArray(Object[] array) {
 		String result = "";
-		for (Integer element : array) {
+		for (Object element : array) {
 			if (!result.isEmpty()) {
 				result += ", ";
 			}
-			result += element;
-		}
-		return "[" + result + "]";
-	}
-
-	/**
-	 * This method convert given {@link Double} array into string representing
-	 * definition of javascript array.
-	 * 
-	 * @param array
-	 * @return
-	 */
-	private static String convertJsArray(Double[] array) {
-		String result = "";
-		for (Double element : array) {
-			if (!result.isEmpty()) {
-				result += ", ";
+			if (element instanceof Object[]) {
+				result += JsfolFormatter.convertJsArray((Object[]) element);
+			} else {
+				result += element;
 			}
-			result += element;
 		}
 		return "[" + result + "]";
 	}

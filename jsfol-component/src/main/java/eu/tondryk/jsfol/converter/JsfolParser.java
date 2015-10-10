@@ -13,6 +13,10 @@ import org.json.simple.parser.ParseException;
 
 import eu.tondryk.jsfol.Feature;
 import eu.tondryk.jsfol.geom.Geometry;
+import eu.tondryk.jsfol.geom.LineString;
+import eu.tondryk.jsfol.geom.MultiLineString;
+import eu.tondryk.jsfol.geom.MultiPoint;
+import eu.tondryk.jsfol.geom.MultiPolygon;
 import eu.tondryk.jsfol.geom.Point;
 import eu.tondryk.jsfol.geom.Polygon;
 import eu.tondryk.jsfol.style.Circle;
@@ -54,7 +58,7 @@ public class JsfolParser {
 			}
 
 		} catch (ParseException e) {
-			// TODO handle exception
+			// invalid geojson
 		}
 		return result;
 
@@ -99,10 +103,57 @@ public class JsfolParser {
 		case "Point":
 			result = JsfolParser.parsePoint((JSONArray) jsonGeometry
 					.get("coordinates"));
+			break;
+		case "Circle":
+			result = JsfolParser.parseGeomCircle(jsonGeometry);
+			break;
+		case "LineString":
+			result = JsfolParser.parseLineString((JSONArray) jsonGeometry
+					.get("coordinates"));
+			break;
+		case "MultiPoint":
+			result = JsfolParser.parseMultiPoint((JSONArray) jsonGeometry
+					.get("coordinates"));
+			break;
+		case "MultiLineString":
+			result = JsfolParser.parseMultiLineString((JSONArray) jsonGeometry
+					.get("coordinates"));
+			break;
+		case "MultiPolygon":
+			result = JsfolParser.parseMultiPolygon((JSONArray) jsonGeometry
+					.get("coordinates"));
+			break;
 		default:
-			// TODO implement other type
+			// invalid type
 		}
 		return result;
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates to {@link Point}
+	 * object.
+	 * 
+	 * @param jsonCoordinates
+	 * @return
+	 */
+	private static Point parsePoint(JSONArray jsonCoordinates) {
+		return new Point(JsfolParser.parseCoordinate(jsonCoordinates));
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates to
+	 * {@link LineString} object.
+	 * 
+	 * @param jsonCoordinates
+	 * @return
+	 */
+	private static LineString parseLineString(JSONArray jsonCoordinates) {
+		List<Coordinate> coordinates = new ArrayList<>();
+		for (Object coordinate : jsonCoordinates) {
+			coordinates
+					.add(JsfolParser.parseCoordinate((JSONArray) coordinate));
+		}
+		return new LineString(coordinates);
 	}
 
 	/**
@@ -122,14 +173,65 @@ public class JsfolParser {
 	}
 
 	/**
-	 * This method converts the given json-array of coordinates to {@link Point}
-	 * object.
+	 * This method converts the given json-array of coordinates to
+	 * {@link MultiPoint} object.
 	 * 
 	 * @param jsonCoordinates
 	 * @return
 	 */
-	private static Point parsePoint(JSONArray jsonCoordinates) {
-		return new Point(JsfolParser.parseCoordinate(jsonCoordinates));
+	private static MultiPoint parseMultiPoint(JSONArray jsonCoordinates) {
+		List<Point> points = new ArrayList<>();
+		for (Object coordinate : jsonCoordinates) {
+			points.add(JsfolParser.parsePoint((JSONArray) coordinate));
+		}
+		return new MultiPoint(points);
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates to
+	 * {@link MultiLineString} object.
+	 * 
+	 * @param jsonCoordinates
+	 * @return
+	 */
+	private static MultiLineString parseMultiLineString(
+			JSONArray jsonCoordinates) {
+		List<LineString> lineStrings = new ArrayList<>();
+		for (Object coordinate : jsonCoordinates) {
+			lineStrings
+					.add(JsfolParser.parseLineString((JSONArray) coordinate));
+		}
+		return new MultiLineString(lineStrings);
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates to
+	 * {@link MultiPolygon} object.
+	 * 
+	 * @param jsonCoordinates
+	 * @return
+	 */
+	private static MultiPolygon parseMultiPolygon(JSONArray jsonCoordinates) {
+		List<Polygon> polygons = new ArrayList<>();
+		for (Object coordinate : jsonCoordinates) {
+			polygons.add(JsfolParser.parsePolygon((JSONArray) coordinate));
+		}
+		return new MultiPolygon(polygons);
+	}
+
+	/**
+	 * This method converts the given json-object to
+	 * {@link eu.tondryk.jsfol.geom.Circle} object.
+	 * 
+	 * @param jsonGeometry
+	 * @return
+	 */
+	private static eu.tondryk.jsfol.geom.Circle parseGeomCircle(
+			JSONObject jsonGeometry) {
+		return new eu.tondryk.jsfol.geom.Circle(
+				JsfolParser.parseCoordinate((JSONArray) jsonGeometry
+						.get("coordinates")),
+				(double) jsonGeometry.get("radius"));
 	}
 
 	/**
@@ -145,18 +247,6 @@ public class JsfolParser {
 			linearRing.add(JsfolParser.parseCoordinate((JSONArray) coordinate));
 		}
 		return linearRing;
-	}
-
-	/**
-	 * This method converts the given json-array of coordinates to
-	 * {@link Coordinate} object.
-	 * 
-	 * @param coordinate
-	 * @return
-	 */
-	private static Coordinate parseCoordinate(JSONArray coordinate) {
-		return new Coordinate((Double) coordinate.get(0),
-				(Double) coordinate.get(1));
 	}
 
 	/**
@@ -198,36 +288,6 @@ public class JsfolParser {
 	 */
 	private static Fill parseFill(JSONObject jsonFill) {
 		return new Fill(JsfolParser.parseColor((String) jsonFill.get("color")));
-	}
-
-	/**
-	 * This method converts the given <i>color</i> (given as rgba-string) to
-	 * {@link Color} object.
-	 * 
-	 * @param colorAsString
-	 * @return
-	 */
-	private static Color parseColor(String colorAsString) {
-		Color color = null;
-		if (colorAsString.startsWith("rgba")) {
-
-			// remove brackets
-			String tmp = colorAsString.substring(5);
-			tmp = tmp.substring(0, tmp.length() - 1);
-
-			// remove whitespaces
-			tmp = tmp.replaceAll("\\s", "");
-
-			// split the red/green/blue/alpha values
-			String[] values = tmp.split(",");
-
-			color = new Color(Integer.parseInt(values[0]),
-					Integer.parseInt(values[1]), Integer.parseInt(values[2]),
-					Float.parseFloat(values[3]));
-		} else {
-			color = new Color(colorAsString);
-		}
-		return color;
 	}
 
 	/**
@@ -411,6 +471,48 @@ public class JsfolParser {
 		}
 		return new Text(font, text, textAlign, textBaseLine, fill, stroke,
 				offsetX, offsetY, scale, rotation);
+	}
+
+	/**
+	 * This method converts the given <i>color</i> (given as rgba-string) to
+	 * {@link Color} object.
+	 * 
+	 * @param colorAsString
+	 * @return
+	 */
+	private static Color parseColor(String colorAsString) {
+		Color color = null;
+		if (colorAsString.startsWith("rgba")) {
+	
+			// remove brackets
+			String tmp = colorAsString.substring(5);
+			tmp = tmp.substring(0, tmp.length() - 1);
+	
+			// remove whitespaces
+			tmp = tmp.replaceAll("\\s", "");
+	
+			// split the red/green/blue/alpha values
+			String[] values = tmp.split(",");
+	
+			color = new Color(Integer.parseInt(values[0]),
+					Integer.parseInt(values[1]), Integer.parseInt(values[2]),
+					Float.parseFloat(values[3]));
+		} else {
+			color = new Color(colorAsString);
+		}
+		return color;
+	}
+
+	/**
+	 * This method converts the given json-array of coordinates to
+	 * {@link Coordinate} object.
+	 * 
+	 * @param coordinate
+	 * @return
+	 */
+	private static Coordinate parseCoordinate(JSONArray coordinate) {
+		return new Coordinate((Double) coordinate.get(0),
+				(Double) coordinate.get(1));
 	}
 
 }

@@ -226,7 +226,7 @@ public class JsfolComponent extends UIComponentBase implements
 	 */
 	public Object getOpenlayersCss() {
 		return (String) this.getStateHelper().eval(PropertyKeys.openlayersCss,
-				"http://openlayers.org/en/v3.10.0/build/ol.js");
+				"http://openlayers.org/en/v3.10.1/build/ol.js");
 	}
 
 	/**
