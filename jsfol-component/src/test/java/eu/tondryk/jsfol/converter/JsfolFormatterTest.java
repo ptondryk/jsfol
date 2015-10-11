@@ -13,6 +13,11 @@ import org.junit.Test;
 import eu.tondryk.jsfol.Feature;
 import eu.tondryk.jsfol.geom.Geometry;
 import eu.tondryk.jsfol.geom.GeometryCollection;
+import eu.tondryk.jsfol.geom.LineString;
+import eu.tondryk.jsfol.geom.MultiLineString;
+import eu.tondryk.jsfol.geom.MultiPoint;
+import eu.tondryk.jsfol.geom.MultiPolygon;
+import eu.tondryk.jsfol.geom.Point;
 import eu.tondryk.jsfol.geom.Polygon;
 import eu.tondryk.jsfol.style.Circle;
 import eu.tondryk.jsfol.style.Fill;
@@ -36,7 +41,43 @@ public class JsfolFormatterTest {
 	 * simple test of the <code>convertFeature</code> method
 	 */
 	@Test
-	public void testConvertFeature() {
+	public void testConvertFeaturePoint() {
+
+		// prepare a test feature
+		Point testPoint = new Point(12.7d, 17.2d);
+		Feature testFeature = new Feature(testPoint, null);
+
+		Assert.assertEquals(
+				"new ol.Feature({geometry : new ol.geom.Point([12.7, 17.2])})",
+				JsfolFormatter.convertFeature(testFeature));
+	}
+
+	/**
+	 * simple test of the <code>convertFeature</code> method
+	 */
+	@Test
+	public void testConvertFeatureLineString() {
+
+		// prepare a test feature
+		List<Coordinate> coordinates = new ArrayList<>();
+		coordinates.add(new Coordinate(30.5, 30.7));
+		coordinates.add(new Coordinate(31.5, 30.7));
+		coordinates.add(new Coordinate(30.5, 31.7));
+		coordinates.add(new Coordinate(30.5, 30.7));
+
+		LineString testLineString = new LineString(coordinates);
+		Feature testFeature = new Feature(testLineString, null);
+
+		Assert.assertEquals(
+				"new ol.Feature({geometry : new ol.geom.LineString([[30.5, 30.7], [31.5, 30.7], [30.5, 31.7], [30.5, 30.7]])})",
+				JsfolFormatter.convertFeature(testFeature));
+	}
+
+	/**
+	 * simple test of the <code>convertFeature</code> method
+	 */
+	@Test
+	public void testConvertFeaturePolygon() {
 
 		// prepare a test feature
 		List<Coordinate> testLinearRing = new ArrayList<Coordinate>();
@@ -51,6 +92,87 @@ public class JsfolFormatterTest {
 
 		Assert.assertEquals(
 				"new ol.Feature({geometry : new ol.geom.Polygon([[[30.5, 30.7], [31.5, 30.7], [30.5, 31.7], [30.5, 30.7]]])})",
+				JsfolFormatter.convertFeature(testFeature));
+	}
+
+	/**
+	 * simple test of the <code>convertFeature</code> method
+	 */
+	@Test
+	public void testConvertFeatureMultiPoint() {
+
+		// prepare a test feature
+		List<Point> points = new ArrayList<>();
+		points.add(new Point(12.7, 17.2));
+		points.add(new Point(11.7, 19.2));
+		MultiPoint testMultiPoint = new MultiPoint(points);
+		Feature testFeature = new Feature(testMultiPoint, null);
+
+		Assert.assertEquals(
+				"new ol.Feature({geometry : new ol.geom.MultiPoint([[12.7, 17.2],[11.7, 19.2]])})",
+				JsfolFormatter.convertFeature(testFeature));
+	}
+
+	/**
+	 * simple test of the <code>convertFeature</code> method
+	 */
+	@Test
+	public void testConvertFeatureMultiLineString() {
+
+		// prepare a test feature
+		List<LineString> lineStrings = new ArrayList<>();
+		List<Coordinate> coordinates1 = new ArrayList<>();
+		List<Coordinate> coordinates2 = new ArrayList<>();
+		coordinates1.add(new Coordinate(12.7, 17.2));
+		coordinates1.add(new Coordinate(11.7, 19.2));
+		coordinates2.add(new Coordinate(1.7, 11.1));
+		coordinates2.add(new Coordinate(2.7, 4));
+		coordinates2.add(new Coordinate(3.7, 5.0));
+		lineStrings.add(new LineString(coordinates1));
+		lineStrings.add(new LineString(coordinates2));
+		MultiLineString testMultiLineString = new MultiLineString(lineStrings);
+		Feature testFeature = new Feature(testMultiLineString, null);
+
+		Assert.assertEquals(
+				"new ol.Feature({geometry : new ol.geom.MultiLineString([[[12.7, 17.2], [11.7, 19.2]],[[1.7, 11.1], [2.7, 4.0], [3.7, 5.0]]])})",
+				JsfolFormatter.convertFeature(testFeature));
+	}
+
+	/**
+	 * simple test of the <code>convertFeature</code> method
+	 */
+	@Test
+	public void testConvertFeatureMultiPolygon() {
+
+		// prepare a test feature
+		List<Polygon> polygons = new ArrayList<>();
+
+		// create first polygon
+		List<Coordinate> testLinearRing1 = new ArrayList<Coordinate>();
+		testLinearRing1.add(new Coordinate(30.5, 30.7));
+		testLinearRing1.add(new Coordinate(31.5, 30.7));
+		testLinearRing1.add(new Coordinate(30.5, 31.7));
+		testLinearRing1.add(new Coordinate(30.5, 30.7));
+		List<List<Coordinate>> testCoordinates1 = new ArrayList<List<Coordinate>>();
+		testCoordinates1.add(testLinearRing1);
+		polygons.add(new Polygon(testCoordinates1));
+
+		// create second polygon
+		List<Coordinate> testLinearRing2 = new ArrayList<Coordinate>();
+		testLinearRing2.add(new Coordinate(30.5, 30.7));
+		testLinearRing2.add(new Coordinate(31.5, 30.7));
+		testLinearRing2.add(new Coordinate(30.5, 31.7));
+		testLinearRing2.add(new Coordinate(38.5, 37.7));
+		testLinearRing2.add(new Coordinate(30.5, 30.7));
+		List<List<Coordinate>> testCoordinates2 = new ArrayList<List<Coordinate>>();
+		testCoordinates2.add(testLinearRing2);
+		polygons.add(new Polygon(testCoordinates2));
+
+		MultiPolygon testMultiPolygon = new MultiPolygon(polygons);
+		Feature testFeature = new Feature(testMultiPolygon, null);
+
+		Assert.assertEquals(
+				"new ol.Feature({geometry : new ol.geom.MultiPolygon([[[[30.5, 30.7], [31.5, 30.7], [30.5, 31.7], [30.5, 30.7]]],[[[30.5, 30.7], [31.5, 30.7], [30.5, 31.7], [38.5, 37.7], [30.5, 30.7]]]])})",
 				JsfolFormatter.convertFeature(testFeature));
 	}
 
