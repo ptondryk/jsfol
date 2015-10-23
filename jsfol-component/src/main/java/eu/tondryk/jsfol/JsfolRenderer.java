@@ -94,6 +94,7 @@ public class JsfolRenderer extends Renderer {
 			// extract the new value from request parameters
 			Map<String, String> requestMap = context.getExternalContext()
 					.getRequestParameterMap();
+			System.out.println("decode = " + requestMap);
 			jsfolComponent.setValue(JsfolParser.parseGeoJson(requestMap
 					.get("jsfol." + jsfolComponent.getId() + ".features")));
 		}

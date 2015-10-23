@@ -45,23 +45,45 @@ public class JsfolParser {
 	 */
 	public static List<Feature> parseGeoJson(String geoJson) {
 		List<Feature> result = new ArrayList<>();
-		JSONParser jsonParser = new JSONParser();
-		try {
-			Object object = jsonParser.parse(geoJson);
-			JSONObject geoJsonObject = (JSONObject) object;
+		if (geoJson != null) {
+			JSONParser jsonParser = new JSONParser();
+			try {
+				Object object = jsonParser.parse(geoJson);
+				JSONObject geoJsonObject = (JSONObject) object;
 
-			if (geoJsonObject.get("features") != null) {
-				JSONArray features = (JSONArray) geoJsonObject.get("features");
-				for (Object feature : features) {
-					result.add(JsfolParser.parseFeature((JSONObject) feature));
+				if (geoJsonObject.get("features") != null) {
+					JSONArray features = (JSONArray) geoJsonObject
+							.get("features");
+					for (Object feature : features) {
+						result.add(JsfolParser
+								.parseFeature((JSONObject) feature));
+					}
 				}
-			}
 
-		} catch (ParseException e) {
-			// invalid geojson
+			} catch (ParseException e) {
+				// invalid geojson
+			}
 		}
 		return result;
 
+	}
+
+	/**
+	 * This method converts the given feature (given in geo-json format) to
+	 * {@link Feature} object.
+	 * 
+	 * @param feature
+	 * @return
+	 */
+	public static Feature parseFeature(String feature) {
+		JSONParser jsonParser = new JSONParser();
+		try {
+			Object object = jsonParser.parse(feature);
+			return JsfolParser.parseFeature((JSONObject) object);
+		} catch (ParseException e) {
+			// invalid feature-format
+		}
+		return null;
 	}
 
 	/**
@@ -483,17 +505,17 @@ public class JsfolParser {
 	private static Color parseColor(String colorAsString) {
 		Color color = null;
 		if (colorAsString.startsWith("rgba")) {
-	
+
 			// remove brackets
 			String tmp = colorAsString.substring(5);
 			tmp = tmp.substring(0, tmp.length() - 1);
-	
+
 			// remove whitespaces
 			tmp = tmp.replaceAll("\\s", "");
-	
+
 			// split the red/green/blue/alpha values
 			String[] values = tmp.split(",");
-	
+
 			color = new Color(Integer.parseInt(values[0]),
 					Integer.parseInt(values[1]), Integer.parseInt(values[2]),
 					Float.parseFloat(values[3]));
