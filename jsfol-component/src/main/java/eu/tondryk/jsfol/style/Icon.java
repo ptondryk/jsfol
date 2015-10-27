@@ -284,34 +284,6 @@ public class Icon extends Image {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(anchor);
-		result = prime * result
-				+ ((anchorOrigin == null) ? 0 : anchorOrigin.hashCode());
-		result = prime * result
-				+ ((anchorXUnits == null) ? 0 : anchorXUnits.hashCode());
-		result = prime * result
-				+ ((anchorYUnits == null) ? 0 : anchorYUnits.hashCode());
-		result = prime * result
-				+ ((crossOrigin == null) ? 0 : crossOrigin.hashCode());
-		result = prime * result + ((img == null) ? 0 : img.hashCode());
-		result = prime * result + ((imgSize == null) ? 0 : imgSize.hashCode());
-		result = prime * result + Arrays.hashCode(offset);
-		result = prime * result
-				+ ((offsetOrigin == null) ? 0 : offsetOrigin.hashCode());
-		result = prime * result + ((size == null) ? 0 : size.hashCode());
-		result = prime * result + ((src == null) ? 0 : src.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

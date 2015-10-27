@@ -52,4 +52,36 @@ public class MultiLineString extends SimpleGeometry {
 		this.lineStrings = lineStrings;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MultiLineString other = (MultiLineString) obj;
+		if (lineStrings == null) {
+			if (other.lineStrings != null)
+				return false;
+		} else if (!lineStrings.equals(other.lineStrings))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MultiLineString [lineStrings=" + lineStrings + "]";
+	}
+
 }

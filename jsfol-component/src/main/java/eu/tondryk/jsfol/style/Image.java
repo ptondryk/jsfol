@@ -135,26 +135,6 @@ public abstract class Image {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((opacity == null) ? 0 : opacity.hashCode());
-		result = prime * result
-				+ ((rotateWithView == null) ? 0 : rotateWithView.hashCode());
-		result = prime * result
-				+ ((rotation == null) ? 0 : rotation.hashCode());
-		result = prime * result + ((scale == null) ? 0 : scale.hashCode());
-		result = prime * result
-				+ ((snapToPixel == null) ? 0 : snapToPixel.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

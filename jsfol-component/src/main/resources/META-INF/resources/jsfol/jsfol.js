@@ -47,7 +47,9 @@ jsfol = (function() {
 	};
 
 	/** Class Map */
-	var Map = function() {
+	var Map = function(divName, x, y, z) {
+
+		// init fields
 		this.map;
 		this.features = new ol.Collection();
 		this.featuresSource = new ol.source.Vector({
@@ -56,6 +58,10 @@ jsfol = (function() {
 		this.featuresLayer = new ol.layer.Vector({
 			source : this.featuresSource
 		});
+		this.divName = divName;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	};
 
 	Map.prototype = {
@@ -70,26 +76,25 @@ jsfol = (function() {
 		 * @param z
 		 *            zoom
 		 */
-		initMap : function(divName, x, y, z) {
+		initMap : function() {
 			this.map = new ol.Map({
-				target : divName,
+				target : this.divName,
 				layers : [ new ol.layer.Tile({
 					source : new ol.source.OSM(),
 					name : 'OpenStreetMap'
 				}) ],
 				view : new ol.View({
-					center : ol.proj.transform([ x, y ], 'EPSG:4326',
+					center : ol.proj.transform([ this.x, this.y ], 'EPSG:4326',
 							'EPSG:3857'),
-					zoom : z
+					zoom : this.z
 				})
 			});
-			addNewMap(divName, this);
+			addNewMap(this.divName, this);
 
 			// add features to the map
 			this.map.addLayer(this.featuresLayer);
 			this.featuresSource.on('addfeature', function(evt) {
-
-				var input = document.getElementById("jsfol." + divName
+				var input = document.getElementById("jsfol." + this.divName
 						+ ".features");
 				if (evt.feature.getStyle() != null) {
 					evt.feature.set("style", this.formatStyle(evt.feature
@@ -98,10 +103,10 @@ jsfol = (function() {
 
 				if (input == null) {
 					var input = document.createElement("input");
-					input.setAttribute("id", "jsfol." + divName + ".features");
-					input
-							.setAttribute("name", "jsfol." + divName
-									+ ".features");
+					input.setAttribute("id", "jsfol." + this.divName
+							+ ".features");
+					input.setAttribute("name", "jsfol." + this.divName
+							+ ".features");
 					input.setAttribute("type", "hidden");
 					input.setAttribute("value", (new ol.format.GeoJSON())
 							.writeFeatures(this.features.getArray(), {
@@ -109,7 +114,7 @@ jsfol = (function() {
 								featureProjection : "EPSG:3857"
 							}));
 					input.setAttribute("autocomplete", "off");
-					document.getElementById(divName).appendChild(input);
+					document.getElementById(this.divName).appendChild(input);
 				} else {
 					input.setAttribute("value", (new ol.format.GeoJSON())
 							.writeFeatures(this.features.getArray(), {
@@ -119,7 +124,7 @@ jsfol = (function() {
 				}
 
 				if (this.newfeatureFunction != null) {
-					this.newfeatureFunction();
+					this.newfeatureFunction(evt.feature);
 				}
 
 			}, this);
@@ -344,7 +349,6 @@ jsfol = (function() {
 		 * this function creates a readable object from ol.style.Circle object
 		 */
 		formatCircle : function(circle) {
-			console.log(circle);
 			var result = {};
 			if (circle.getFill() != null) {
 				result.fill = this.formatFill(circle.getFill());

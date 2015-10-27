@@ -157,26 +157,6 @@ public class Stroke {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((lineCap == null) ? 0 : lineCap.hashCode());
-		result = prime * result + Arrays.hashCode(lineDash);
-		result = prime * result
-				+ ((lineJoin == null) ? 0 : lineJoin.hashCode());
-		result = prime * result
-				+ ((miterLimit == null) ? 0 : miterLimit.hashCode());
-		result = prime * result + ((width == null) ? 0 : width.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

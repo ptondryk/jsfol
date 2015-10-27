@@ -239,31 +239,6 @@ public class Text {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fill == null) ? 0 : fill.hashCode());
-		result = prime * result + ((font == null) ? 0 : font.hashCode());
-		result = prime * result + ((offsetX == null) ? 0 : offsetX.hashCode());
-		result = prime * result + ((offsetY == null) ? 0 : offsetY.hashCode());
-		result = prime * result
-				+ ((rotation == null) ? 0 : rotation.hashCode());
-		result = prime * result + ((scale == null) ? 0 : scale.hashCode());
-		result = prime * result + ((stroke == null) ? 0 : stroke.hashCode());
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result
-				+ ((textAlign == null) ? 0 : textAlign.hashCode());
-		result = prime * result
-				+ ((textBaseLine == null) ? 0 : textBaseLine.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

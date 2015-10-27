@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:test="http://tondryk.eu/jsfol/component">
+<h:head>
+	<script type="text/javascript">
+		var geometries = ""
+		var newFeatureFunction = function(feature) {
+			if (geometries) {
+				geometries += ",";
+			}
+			geometries += feature.getGeometry().getType();
+			document.getElementById("testAddFeatureText").innerHTML = geometries;
+		}
+	</script>
+</h:head>
+<h:body>
+
+	<h:form prependId="false">
+
+		<test:jsfol id="testMap" value="#{fakeView.value}"
+			width="#{fakeView.width}" height="#{fakeView.height}"
+			x="#{fakeView.x}" y="#{fakeView.y}" zoom="#{fakeView.zoom}"
+			interactionType="#{fakeView.interactionType}">
+			<f:ajax event="newfeature" onevent="newFeatureFunction" />
+		</test:jsfol>
+
+		<h:outputText id="testExecuteText" value="#{fakeView.value}" />
+		<h:outputText id="testAddFeatureText" value="" />
+
+		<h:commandButton id="testExecuteButton" value="Exceute Button">
+			<f:ajax execute="testMap" render="testExecuteText" />
+		</h:commandButton>
+
+		<h:commandButton id="testRenderButton" action="#{fakeView.addFeature}"
+			value="Render Button" onclick="geometries='';">
+			<f:ajax render="testMap" />
+		</h:commandButton>
+
+	</h:form>
+
+</h:body>
+</html>

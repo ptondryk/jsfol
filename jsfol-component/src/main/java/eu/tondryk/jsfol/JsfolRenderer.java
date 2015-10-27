@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
-import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.FacesRenderer;
@@ -38,6 +38,7 @@ public class JsfolRenderer extends Renderer {
 			throws IOException {
 		if (component instanceof JsfolComponent) {
 			JsfolComponent jsfolComponent = (JsfolComponent) component;
+			jsfolComponent.reloadValues(context);
 
 			if (jsfolComponent.getId() != null
 					&& jsfolComponent.getWidth() != null
@@ -48,9 +49,6 @@ public class JsfolRenderer extends Renderer {
 
 				ResponseWriter writer = context.getResponseWriter();
 
-				// add openlayers library script
-				this.addOpenlayers(writer, jsfolComponent);
-
 				// add main map div
 				this.addMapDiv(writer, jsfolComponent);
 
@@ -58,7 +56,6 @@ public class JsfolRenderer extends Renderer {
 				writer.startElement("script", null);
 				String jsVarName = "jsfolMap_" + jsfolComponent.getId();
 
-				// load map into div
 				this.initOlMap(writer, jsfolComponent, jsVarName);
 
 				Map<String, List<ClientBehavior>> behaviors = jsfolComponent
@@ -94,30 +91,9 @@ public class JsfolRenderer extends Renderer {
 			// extract the new value from request parameters
 			Map<String, String> requestMap = context.getExternalContext()
 					.getRequestParameterMap();
-			System.out.println("decode = " + requestMap);
 			jsfolComponent.setValue(JsfolParser.parseGeoJson(requestMap
 					.get("jsfol." + jsfolComponent.getId() + ".features")));
 		}
-	}
-
-	/**
-	 * This method adds the openlayers-library and style to the web-site.
-	 * 
-	 * @param writer
-	 * @param jsfolComponent
-	 * @throws IOException
-	 */
-	private void addOpenlayers(ResponseWriter writer,
-			JsfolComponent jsfolComponent) throws IOException {
-		writer.startElement("script", null);
-		writer.writeAttribute("type", "text/javascript", null);
-		writer.writeAttribute("src", jsfolComponent.getOpenlayersJs(), null);
-		writer.endElement("script");
-		writer.startElement("link", null);
-		writer.writeAttribute("rel", "stylesheet", null);
-		writer.writeAttribute("href", jsfolComponent.getOpenlayersCss(), null);
-		writer.writeAttribute("type", "text/css", null);
-		writer.endElement("link");
 	}
 
 	/**
@@ -147,10 +123,10 @@ public class JsfolRenderer extends Renderer {
 	 */
 	private void initOlMap(ResponseWriter writer,
 			JsfolComponent jsfolComponent, String jsVarName) throws IOException {
-		writer.write("var " + jsVarName + " = new jsfol.Map();");
-		writer.write(jsVarName + ".initMap('" + jsfolComponent.getId() + "',"
-				+ jsfolComponent.getX() + "," + jsfolComponent.getY() + ","
-				+ jsfolComponent.getZoom() + ");");
+		writer.write("var " + jsVarName + " = new jsfol.Map('"
+				+ jsfolComponent.getId() + "'," + jsfolComponent.getX() + ","
+				+ jsfolComponent.getY() + "," + jsfolComponent.getZoom() + ");");
+		writer.write(jsVarName + ".initMap();");
 	}
 
 	/**
@@ -192,13 +168,10 @@ public class JsfolRenderer extends Renderer {
 					featuresArray += ",";
 				}
 				featuresArray += name;
-				;
 			}
-
 			writer.write(features + jsVarName + ".addFeatures(" + "["
 					+ featuresArray + "]" + ");");
 		}
-
 	}
 
 	/**
@@ -236,17 +209,18 @@ public class JsfolRenderer extends Renderer {
 			JsfolComponent jsfolComponent,
 			Map<String, List<ClientBehavior>> behaviors, String jsVarName,
 			FacesContext context) throws IOException {
-		// create client behavior
-		ClientBehaviorContext behaviorContext = ClientBehaviorContext
-				.createClientBehaviorContext(context, jsfolComponent,
-						"newfeature", jsfolComponent.getId(), null);
-
 		// assign ajax-function to the map-object
-		String newfeatureFunction = behaviors.get("newfeature").get(0)
-				.getScript(behaviorContext)
-				.replaceAll("@this", jsfolComponent.getClientId(context));
-		writer.write(jsVarName + ".addNewfeatureFunction(function() {"
-				+ newfeatureFunction + ";return false;});");
+		String newfeatureFunction = ((AjaxBehavior) behaviors.get("newfeature")
+				.get(0)).getOnevent();
+
+		if (newfeatureFunction.contains("=")
+				|| newfeatureFunction.contains("(")) {
+			writer.write(jsVarName + ".addNewfeatureFunction(function() {"
+					+ newfeatureFunction + ";return false;});");
+		} else {
+			writer.write(jsVarName + ".addNewfeatureFunction("
+					+ newfeatureFunction + ");");
+		}
 	}
 
 	/**

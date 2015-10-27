@@ -3,6 +3,7 @@
  */
 package eu.tondryk.jsfol;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,8 +14,14 @@ import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ListenerFor;
+import javax.faces.event.PostAddToViewEvent;
 
 /**
  * @author ptondryk
@@ -24,6 +31,7 @@ import javax.faces.context.FacesContext;
 @ResourceDependencies({
 		@ResourceDependency(library = "javax.faces", name = "jsf.js", target = "head"),
 		@ResourceDependency(library = "jsfol", name = "jsfol.js", target = "head") })
+@ListenerFor(systemEventClass = PostAddToViewEvent.class)
 public class JsfolComponent extends UIComponentBase implements
 		ClientBehaviorHolder {
 
@@ -74,6 +82,50 @@ public class JsfolComponent extends UIComponentBase implements
 				}
 			}
 		}
+	}
+
+	/**
+	 * reload values from bean
+	 */
+	public void reloadValues(FacesContext context) {
+		for (PropertyKeys propertyKey : PropertyKeys.values()) {
+			ValueExpression ve = this.getValueExpression(propertyKey.name());
+			if (ve != null
+					&& !this.getStateHelper().eval(propertyKey)
+							.equals(ve.getValue(context.getELContext()))) {
+				this.getStateHelper().put(propertyKey,
+						ve.getValue(context.getELContext()));
+			}
+		}
+	}
+
+	@Override
+	public void processEvent(ComponentSystemEvent event)
+			throws AbortProcessingException {
+		if (event instanceof PostAddToViewEvent) {
+			UINamingContainer scripts = new UINamingContainer() {
+				@Override
+				public void encodeBegin(FacesContext context)
+						throws IOException {
+					ResponseWriter writer = context.getResponseWriter();
+					writer.startElement("script", this);
+					writer.writeAttribute("type", "text/javascript", null);
+					writer.writeAttribute("src", getOpenlayersJs(), null);
+					writer.endElement("script");
+					writer.startElement("link", null);
+					writer.writeAttribute("rel", "stylesheet", null);
+					writer.writeAttribute("href", getOpenlayersCss(), null);
+					writer.writeAttribute("type", "text/css", null);
+					writer.endElement("link");
+				}
+			};
+			FacesContext
+					.getCurrentInstance()
+					.getViewRoot()
+					.addComponentResource(FacesContext.getCurrentInstance(),
+							scripts);
+		}
+		super.processEvent(event);
 	}
 
 	/**

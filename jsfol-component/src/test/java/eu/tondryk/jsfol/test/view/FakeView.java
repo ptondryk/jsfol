@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import eu.tondryk.jsfol.Feature;
+import eu.tondryk.jsfol.geom.Point;
 
 /**
  * @author ptondryk
@@ -24,10 +25,20 @@ public class FakeView implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3120599902693128937L;
+
 	/**
 	 * 
 	 */
 	private List<Feature> features = new ArrayList<>();
+
+	/**
+	 * this method adds a new test feature to the features list
+	 */
+	public void addFeature() {
+		Point point = new Point(13.271494d, 52.6047356d);
+		Feature newFeature = new Feature(point, null);
+		this.features.add(newFeature);
+	}
 
 	/**
 	 * 
@@ -76,13 +87,12 @@ public class FakeView implements Serializable {
 	public String getInteractionType() {
 		return "Polygon";
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public List<Feature> getValue() {
-		System.out.println("GET " + this.features);
 		return this.features;
 	}
 
@@ -91,7 +101,6 @@ public class FakeView implements Serializable {
 	 * @param features
 	 */
 	public void setValue(List<Feature> features) {
-		System.out.println("SET " + features);
 		this.features = features;
 	}
 }

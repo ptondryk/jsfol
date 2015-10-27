@@ -100,21 +100,6 @@ public class Circle extends Image {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fill == null) ? 0 : fill.hashCode());
-		result = prime * result + ((radius == null) ? 0 : radius.hashCode());
-		result = prime * result + ((stroke == null) ? 0 : stroke.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
